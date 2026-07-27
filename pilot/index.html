@@ -1,0 +1,393 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>StayKey テストパイロット計画 ─ 熊本・かすみさん</title>
+<meta name="description" content="StayKey 1件目の導入（熊本・かすみさん）の段取り。遠隔導入が成立するかを検証する実験として設計。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;500;700;800;900&family=Lilita+One&display=swap" rel="stylesheet">
+<style>
+  :root{
+    color-scheme:light;
+    --font-jp:"M PLUS Rounded 1c",-apple-system,BlinkMacSystemFont,"Hiragino Maru Gothic ProN","Hiragino Sans",sans-serif;
+    --font-en:"Lilita One",var(--font-jp);
+    --ease-out:cubic-bezier(.22,1,.36,1);
+    --teal:#0E9E9A; --teal-d:#0B5D64; --deep:#0E3A42; --soft:#E7F6F4; --line:#E6E0D6;
+    --coral:#F2664A; --coral-d:#c9482f; --coral-soft:#FDEBE5; --gold:#FFC24B; --gold-soft:#FFF6E0;
+    --green:#2E9E6B; --amber:#E0913A;
+    --ink:#26383B; --sub:#6A7B7B; --bg:#FBF7F1; --card:#fff;
+    --r:18px; --sh:0 10px 30px rgba(20,60,60,.08); --sh2:0 3px 12px rgba(20,60,60,.07);
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{background:var(--bg);color:var(--ink);font-family:var(--font-jp);font-weight:500;
+    line-height:1.9;-webkit-font-smoothing:antialiased;overflow-x:hidden;}
+  body,p,li,td,th,div,span,b,small,summary,button,a,h1,h2,h3,h4{
+    word-break:auto-phrase;line-break:strict;overflow-wrap:anywhere;}
+  h1,h2,h3,h4,.tag,.chip,.pill,.lead,.note,.kicker,.card-t,.step-t{text-wrap:balance;}
+  p,li,.body-text{text-wrap:pretty;}
+  h1,h2,h3{font-weight:900;line-height:1.4;}
+  .wrap{max-width:860px;margin:0 auto;padding:0 20px;}
+  a{color:var(--teal-d);}
+
+  .cover{background:radial-gradient(120% 120% at 85% -10%,rgba(255,194,75,.28),transparent 58%),
+    linear-gradient(135deg,#0A2A30,#0E3A42 45%,#0E7C86);color:#fff;padding:52px 0 46px;position:relative;overflow:hidden;}
+  .cover::after{content:"";position:absolute;inset:auto 0 0 0;height:60px;
+    background:repeating-linear-gradient(115deg,rgba(255,255,255,.05) 0 22px,transparent 22px 46px);}
+  .cover .wrap{position:relative;z-index:1;}
+  .kicker{display:inline-block;background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.34);
+    padding:5px 14px;border-radius:999px;font-size:12.5px;font-weight:800;margin-bottom:14px;}
+  .cover h1{font-size:30px;line-height:1.36;margin-bottom:12px;}
+  .cover h1 b{color:var(--gold);}
+  .cover p{font-size:15px;opacity:.95;max-width:640px;}
+  .meta{margin-top:22px;display:flex;flex-wrap:wrap;gap:9px;font-size:12.5px;}
+  .meta span{background:rgba(255,255,255,.13);padding:6px 12px;border-radius:8px;}
+
+  section{padding:40px 0;}
+  .sec-h{display:flex;align-items:center;gap:11px;margin-bottom:8px;}
+  .sec-n{background:var(--teal-d);color:#fff;font-weight:900;font-size:12.5px;
+    width:30px;height:30px;border-radius:9px;display:grid;place-items:center;flex:none;}
+  .sec-h h2{font-size:21px;}
+  .lead{color:var(--sub);font-size:14.5px;margin-bottom:20px;}
+
+  .card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:20px;box-shadow:var(--sh2);}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+  .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;}
+
+  .why{background:linear-gradient(135deg,var(--coral),var(--gold));color:#fff;border-radius:var(--r);padding:24px;box-shadow:var(--sh);}
+  .why .t{font-size:12px;font-weight:800;letter-spacing:.08em;opacity:.92;}
+  .why h3{font-size:20px;margin:5px 0 8px;}
+  .why p{font-size:14px;opacity:.96;}
+
+  .phase{background:var(--card);border:1px solid var(--line);border-radius:var(--r);
+    box-shadow:var(--sh2);margin-bottom:14px;overflow:hidden;}
+  .ph-h{display:flex;align-items:center;gap:12px;padding:14px 18px;background:var(--soft);}
+  .ph-n{background:var(--teal-d);color:#fff;font-weight:900;font-size:12px;padding:4px 10px;border-radius:8px;flex:none;}
+  .ph-h h3{font-size:16px;}
+  .ph-h .when{margin-left:auto;font-size:11.5px;font-weight:800;color:var(--teal-d);
+    background:#fff;padding:4px 10px;border-radius:999px;flex:none;}
+  .ph-b{padding:14px 18px 18px;}
+  .ph-b ul{margin:0;padding-left:20px;font-size:13.6px;}
+  .ph-b li{margin:5px 0;}
+  .ph-goal{margin-top:12px;background:var(--gold-soft);border:1px dashed var(--gold);
+    border-radius:11px;padding:9px 13px;font-size:12.8px;font-weight:700;color:#8a6a1e;}
+
+  .opt{border-radius:var(--r);padding:18px;border:1px solid var(--line);box-shadow:var(--sh2);background:var(--card);}
+  .opt.pick{border:2.5px solid var(--coral);background:linear-gradient(180deg,var(--coral-soft),#fff);}
+  .opt .tag{font-size:11.5px;font-weight:800;padding:3px 10px;border-radius:6px;color:#fff;background:var(--teal);display:inline-block;}
+  .opt.pick .tag{background:var(--coral);}
+  .opt h3{font-size:15.5px;margin:9px 0 5px;}
+  .opt .price{font-size:19px;font-weight:900;color:var(--deep);margin:4px 0;}
+  .opt p{font-size:12.8px;color:var(--sub);}
+
+  table{width:100%;border-collapse:collapse;font-size:13.3px;border-radius:12px;overflow:hidden;}
+  th{background:var(--deep);color:#fff;padding:10px 12px;text-align:left;font-weight:700;font-size:12.8px;}
+  td{padding:10px 12px;border-bottom:1px solid var(--line);vertical-align:top;}
+  tr:nth-child(even) td{background:#F8FAF9;}
+  .scroll-x{overflow-x:auto;}
+
+  .yes-no{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+  .yn{border-radius:var(--r);padding:18px;box-shadow:var(--sh2);}
+  .yn.y{background:#EAF7EF;border:1px solid #BFE6CE;}
+  .yn.n{background:#FDECEA;border:1px solid #F5C9C1;}
+  .yn h3{font-size:15px;margin-bottom:8px;}
+  .yn.y h3{color:var(--green);} .yn.n h3{color:var(--coral-d);}
+  .yn ul{margin:0;padding-left:19px;font-size:13.2px;} .yn li{margin:4px 0;}
+
+  .msg{background:#fff;border:2px dashed var(--teal);border-radius:var(--r);padding:20px;font-size:13.8px;line-height:2;}
+  .msg .h{font-size:12px;font-weight:800;color:var(--teal-d);margin-bottom:10px;letter-spacing:.05em;}
+
+  .warn{background:var(--coral-soft);border:1px solid #F5C9C1;border-left:4px solid var(--coral);
+    border-radius:12px;padding:13px 16px;font-size:13.2px;color:var(--coral-d);font-weight:700;margin-top:14px;}
+  .tip{background:var(--soft);border-radius:12px;padding:13px 16px;font-size:13.2px;color:var(--teal-d);font-weight:700;margin-top:14px;}
+  .note{background:#fff;border:1px dashed var(--line);border-radius:12px;padding:13px 16px;font-size:12.6px;color:var(--sub);margin-top:14px;}
+
+  .rv{opacity:0;transform:translateY(22px);transition:opacity .6s var(--ease-out),transform .6s var(--ease-out);}
+  .rv.in{opacity:1;transform:none;}
+  @media(prefers-reduced-motion:reduce){.rv{opacity:1!important;transform:none!important;transition:none!important;}}
+
+  footer{padding:26px 0 46px;text-align:center;color:var(--sub);font-size:12px;}
+  @media(max-width:720px){
+    .grid2,.grid3,.yes-no{grid-template-columns:1fr;}
+    .cover h1{font-size:23px;} .sec-h h2{font-size:18px;}
+    .ph-h{flex-wrap:wrap;} .ph-h .when{margin-left:0;}
+  }
+</style>
+</head>
+<body>
+
+<div class="cover"><div class="wrap">
+  <span class="kicker">StayKey ／ 1件目の導入計画</span>
+  <h1>熊本・かすみさんを<br><b>テストパイロット</b>にする段取り</h1>
+  <p>この1件は「初めてのお客様」ではありません。<br><b>遠隔で導入代行が成立するか</b>を確かめる、事業の分かれ道になる実験です。</p>
+  <div class="meta">
+    <span>対象：かすみさん（熊本）</span>
+    <span>実施：ソイさん × ユウキ</span>
+    <span>2026.07</span>
+  </div>
+</div></div>
+
+<!-- WHY -->
+<section><div class="wrap">
+  <div class="sec-h"><span class="sec-n">01</span><h2>なぜ、この1件が重要なのか</h2></div>
+  <p class="lead">結論から言うと、売上のためではなく<b>ビジネスモデルの前提を確かめるため</b>です。</p>
+
+  <div class="why rv">
+    <div class="t">この実験の本当のテーマ</div>
+    <h3>「導入は、ぜんぶおまかせ」は、遠隔でも成立するのか？</h3>
+    <p>ソイさんは東京（住吉）、かすみさんは熊本。現地に行けません。<br>
+    StayKeyの一番の売り＝「むずかしい設定は全部こちらで」を、<b>距離を越えて届けられるか</b>がここで判明します。</p>
+  </div>
+
+  <div class="grid2" style="margin-top:16px;">
+    <div class="card rv">
+      <h3 class="card-t" style="font-size:15px;color:var(--green);margin-bottom:6px;">✅ 成立したら</h3>
+      <p style="font-size:13.3px;color:var(--sub);">商圏が<b>全国</b>になります。ラジオ（全国のリスナー）が本物の販路になり、移動コストゼロで売れる商品になる。</p>
+    </div>
+    <div class="card rv">
+      <h3 class="card-t" style="font-size:15px;color:var(--amber);margin-bottom:6px;">⚠️ 成立しなかったら</h3>
+      <p style="font-size:13.3px;color:var(--sub);">商圏は<b>東京近郊に限定</b>。単価を上げて出張費を乗せる設計へ切り替える必要があります。<br>早く分かるほど傷が浅い。</p>
+    </div>
+  </div>
+
+  <div class="tip rv">💡 提案：<b>哲郎さん（東京・近距離）と同時に走らせる</b>と、近い／遠いの差が数字で出ます。導入にかかる時間の差＝そのまま出張費の根拠になり、価格設計が一気に固まります。</div>
+</div></section>
+
+<!-- PHASES -->
+<section style="background:linear-gradient(180deg,var(--soft),var(--bg));"><div class="wrap">
+  <div class="sec-h"><span class="sec-n">02</span><h2>段取り（5フェーズ）</h2></div>
+  <p class="lead">各フェーズに「ここで何が分かればOKか」を置いてあります。ダメなら早く降りるのも成功です。</p>
+
+  <div class="phase rv">
+    <div class="ph-h"><span class="ph-n">PHASE 0</span><h3>ソイさんと目的を合わせる</h3><span class="when">今日〜明日</span></div>
+    <div class="ph-b">
+      <ul>
+        <li>この1件の目的は「売ること」でなく<b>「遠隔導入の可否を確かめること」</b>だと合意する</li>
+        <li>無料／有料の線引きを決める（→ 03章）</li>
+        <li>約束すること・しないことを決める（→ 04章）</li>
+        <li>撤退ラインを先に決める（→ 05章）</li>
+      </ul>
+      <div class="ph-goal">🎯 ここでの合格：ソイさんが「これはテストで、失敗してもいい」と理解している</div>
+    </div>
+  </div>
+
+  <div class="phase rv">
+    <div class="ph-h"><span class="ph-n">PHASE 1</span><h3>かすみさんヒアリング（オンライン30分）</h3><span class="when">今週</span></div>
+    <div class="ph-b">
+      <p style="font-size:13.3px;color:var(--sub);margin-bottom:10px;">聞くこと。<b>太字は導入可否に直結する必須項目</b>です。</p>
+      <ul>
+        <li><b>物件の種類</b>（民泊／レンタルスペース／間貸し／その他）と<b>部屋数</b></li>
+        <li><b>今の鍵の運用</b>（物理キー手渡し／キーボックス／すでにスマートロック）</li>
+        <li>一番の困りごと（深夜対応？ 遠方で行けない？ 清掃業者の出入り？）</li>
+        <li>使っている予約サイト（Airbnb／スペースマーケット／その他）</li>
+        <li><b>ドアと鍵の形</b> ← セサミが付くかはここ次第。<b>写真をもらう</b></li>
+        <li><b>ドア付近にWi-Fiが届くか</b> ← ハブに必須。届かないと成立しない</li>
+        <li><b>現地で手を動かせる人がいるか</b>（本人／家族／清掃スタッフ／管理会社）</li>
+        <li>ゲストの層（国内／海外・スマホ操作の得意不得意）</li>
+      </ul>
+      <div class="ph-goal">🎯 ここでの合格：ドア写真とWi-Fi状況が手に入り、設置できる人が特定できている</div>
+    </div>
+  </div>
+
+  <div class="phase rv">
+    <div class="ph-h"><span class="ph-n">PHASE 2</span><h3>適合チェック（写真判定）</h3><span class="when">1〜2日</span></div>
+    <div class="ph-b">
+      <ul>
+        <li>ドア内側・サムターン周辺の写真をソイさんが見て「付くか」を判定</li>
+        <li>付かない錠前なら<b>ここで正直に伝えて撤退</b>。お互いの時間を守る</li>
+        <li>付く場合は必要な機器と数量を確定（セサミ＋ハブ3／1ハブで5台まで）</li>
+      </ul>
+      <div class="ph-goal">🎯 ここでの合格：「付く／付かない」が写真だけで判定できた（＝営業も遠隔でできる証明）</div>
+      <div class="warn">⚠️ ここが遠隔ビジネスの最初の関門。写真だけで判定できないなら、その"判定の難しさ"自体が重要な発見です。</div>
+    </div>
+  </div>
+
+  <div class="phase rv">
+    <div class="ph-h"><span class="ph-n">PHASE 3</span><h3>機器を送る → ビデオ通話で一緒に設置</h3><span class="when">1週間</span></div>
+    <div class="ph-b">
+      <ul>
+        <li>セサミ＋ハブを熊本へ発送（費用は03章の方針で）</li>
+        <li>設置日を決め、<b>ビデオ通話でドアを映してもらいながら</b>一緒に取り付け</li>
+        <li>予約サイト連携はソイさんが遠隔で設定</li>
+        <li><b>所要時間をストップウォッチで計測</b>（＝導入代行の原価そのもの）</li>
+        <li>つまずいた箇所を全部メモ（＝AIサポートFAQの素材）</li>
+      </ul>
+      <div class="ph-goal">🎯 ここでの合格：<b>2時間以内</b>に解錠テストまで通る。超えるなら商品設計の見直しが必要</div>
+    </div>
+  </div>
+
+  <div class="phase rv">
+    <div class="ph-h"><span class="ph-n">PHASE 4</span><h3>実運用（2週間〜1ヶ月）</h3><span class="when">1ヶ月</span></div>
+    <div class="ph-b">
+      <ul>
+        <li>実際のゲストで運用してもらう</li>
+        <li>質問・トラブルを<b>すべて記録</b>（件数と内容が保守費の根拠になる）</li>
+        <li>「元の鍵運用にすぐ戻せる手順」を渡しておく（安心材料＆事故対策）</li>
+        <li>2週目に一度こちらから様子を聞く（放置しない）</li>
+      </ul>
+      <div class="ph-goal">🎯 ここでの合格：締め出しゼロ。質問が出ても自己解決 or 短時間で解消できている</div>
+    </div>
+  </div>
+
+  <div class="phase rv">
+    <div class="ph-h"><span class="ph-n">PHASE 5</span><h3>振り返り・事例化</h3><span class="when">1ヶ月後</span></div>
+    <div class="ph-b">
+      <ul>
+        <li>感想をもらう → LPの<b>「お客様の声」1件目</b>（今はサンプル表示のまま）</li>
+        <li>写真・許可をもらって導入事例に</li>
+        <li><b>「いくらなら払うか」を本人に聞く</b> ← 一番リアルな価格データ</li>
+        <li>ラジオでゲストとして話してもらう案も（＝そのまま次の営業になる）</li>
+      </ul>
+      <div class="ph-goal">🎯 ここでの合格：価格の実データと、次の人に見せられる事例が1件できている</div>
+    </div>
+  </div>
+</div></section>
+
+<!-- PRICE -->
+<section><div class="wrap">
+  <div class="sec-h"><span class="sec-n">03</span><h2>無料にするか、いくらもらうか</h2></div>
+  <p class="lead">ここは先に決めておかないと、後から言い出しにくくなります。3案。</p>
+  <div class="grid3">
+    <div class="opt rv">
+      <span class="tag">案A</span>
+      <h3>完全無料</h3>
+      <div class="price">0円</div>
+      <p>機器もこちら持ち。頼みやすいが、<b>本気の評価が返ってきにくい</b>。やめる時も気軽になってしまう。</p>
+    </div>
+    <div class="opt pick rv">
+      <span class="tag">案B ・ 推奨</span>
+      <h3>機器の実費だけ</h3>
+      <div class="price">約 7,000円</div>
+      <p>セサミ約5,000＋ハブ約2,000。<b>導入代行と保守は無料</b>。お金を出すと当事者になり、評価が本音になる。</p>
+    </div>
+    <div class="opt rv">
+      <span class="tag">案C</span>
+      <h3>通常価格の半額</h3>
+      <div class="price">要設定</div>
+      <p>価格が未確定の今は決めづらい。<b>価格を検証する前に価格を提示してしまう</b>矛盾がある。</p>
+    </div>
+  </div>
+  <div class="tip">💡 <b>案Bを推す理由</b>：これはテストなので、こちらが受け取るべき対価は「お金」ではなく<b>フィードバックと事例掲載の許可</b>です。それを最初にはっきり伝えると、かすみさんも協力しやすくなります。</div>
+</div></section>
+
+<!-- PROMISE -->
+<section style="background:linear-gradient(180deg,var(--soft),var(--bg));"><div class="wrap">
+  <div class="sec-h"><span class="sec-n">04</span><h2>約束すること／しないこと</h2></div>
+  <p class="lead">ここを曖昧にすると、あとで必ずこじれます。最初に口頭でも文面でも伝えておく。</p>
+  <div class="yes-no">
+    <div class="yn y rv">
+      <h3>✅ 約束する</h3>
+      <ul>
+        <li>設置から使えるようになるまで<b>最後まで伴走</b>する</li>
+        <li>合わなければ<b>元の鍵運用に戻せる</b>（撤去も手伝う）</li>
+        <li>事例として出す時は<b>必ず事前に確認</b>する</li>
+        <li>困った時の連絡先を明示する</li>
+      </ul>
+    </div>
+    <div class="yn n rv">
+      <h3>⚠️ 約束しない（先に伝える）</h3>
+      <ul>
+        <li>完成品ではなく<b>テスト版</b>であること</li>
+        <li>24時間365日の即対応は<b>まだできない</b>（体制構築中）</li>
+        <li>不具合が起きる可能性がある前提で使ってもらう</li>
+        <li>予約サイトの仕様変更で止まる場合がある</li>
+      </ul>
+    </div>
+  </div>
+  <div class="warn">⚠️ 特に「締め出し（解錠できずゲストが入れない）」が起きた時の連絡手順と代替手段は、<b>導入前に必ず決めて渡しておく</b>こと。ここだけは事故ると信頼が一発で消えます。</div>
+</div></section>
+
+<!-- MEASURE -->
+<section><div class="wrap">
+  <div class="sec-h"><span class="sec-n">05</span><h2>計測すること＝この実験の本当の成果物</h2></div>
+  <p class="lead">「うまくいった／いかなかった」の感想でなく、次の判断に使える数字を持ち帰ります。</p>
+  <div class="scroll-x">
+  <table>
+    <tr><th>測るもの</th><th>なぜ必要か</th><th>合格ライン（仮）</th></tr>
+    <tr><td>写真での適合判定にかかった時間</td><td>遠隔営業のコスト見積</td><td>30分以内</td></tr>
+    <tr><td><b>遠隔設置の所要時間</b></td><td><b>導入代行の原価そのもの</b>。初期費用の根拠</td><td>2時間以内</td></tr>
+    <tr><td>かすみさんからの質問の数と内容</td><td>AIサポートFAQ 10件の素材になる</td><td>全部記録</td></tr>
+    <tr><td>30日間のトラブル件数</td><td>月額保守費が妥当かの根拠</td><td>0〜1件</td></tr>
+    <tr><td>締め出しの発生</td><td>最重要リスク</td><td><b>0件</b></td></tr>
+    <tr><td>「いくらなら払うか」の本人回答</td><td>価格の実データ（ラジオ調査より確度が高い）</td><td>必ず聞く</td></tr>
+  </table>
+  </div>
+  <div class="note">※ 合格ラインは仮です。むしろ「超えてしまった」時にこそ、商品設計を直すヒントが得られます。</div>
+</div></section>
+
+<!-- EXIT -->
+<section style="background:linear-gradient(180deg,var(--coral-soft),var(--bg));"><div class="wrap">
+  <div class="sec-h"><span class="sec-n">06</span><h2>撤退ライン（先に決めておく）</h2></div>
+  <p class="lead">「やめどき」を最初に決めておくと、情に引きずられず冷静に判断できます。</p>
+  <div class="grid3">
+    <div class="card rv"><h3 class="card-t" style="font-size:14.5px;margin-bottom:5px;">🚪 ドアに付かない</h3>
+      <p style="font-size:13px;color:var(--sub);">Phase 2で正直に伝えて終了。<b>傷は浅い</b>。錠前の型番リストを作る材料にする。</p></div>
+    <div class="card rv"><h3 class="card-t" style="font-size:14.5px;margin-bottom:5px;">⏱ 設置が2時間を超える</h3>
+      <p style="font-size:13px;color:var(--sub);">遠隔導入がビジネスとして割に合わない兆候。<b>手順書・動画マニュアルの整備が先</b>と判断する。</p></div>
+    <div class="card rv"><h3 class="card-t" style="font-size:14.5px;margin-bottom:5px;">🔒 締め出しが起きた</h3>
+      <p style="font-size:13px;color:var(--sub);">即座に物理キー運用へ戻す。原因が特定できるまで<b>次の顧客には売らない</b>。</p></div>
+  </div>
+</div></section>
+
+<!-- MESSAGE -->
+<section><div class="wrap">
+  <div class="sec-h"><span class="sec-n">07</span><h2>かすみさんに送るメッセージ（案）</h2></div>
+  <p class="lead">「お願い」ではなく「一緒に作りませんか」の立て付けにすると通りやすいです。</p>
+  <div class="msg rv">
+    <div class="h">▼ そのまま使える文面（LINE / メッセンジャー）</div>
+    かすみさん、さきほどはありがとうございました！<br><br>
+    お話しした鍵の自動化の件、<b>ぜひ最初の1軒目としてご一緒できたら</b>と思っています。<br><br>
+    まだ完成品ではなくテスト段階なので、正直に言うと「一緒に育ててもらう」お願いです。そのぶん、<b>設置も設定もこちらで全部やります</b>し、費用は機器の実費（7,000円ほど）だけで、導入とサポートは無料でやらせてください。<br><br>
+    合わなければ、いつでも元の鍵の運用に戻せます。<br><br>
+    まずは30分ほどお時間をいただいて、今の鍵まわりのお困りごとと、ドアの様子を見せていただけたらと思います。<br>
+    （※セサミという鍵が付けられるドアかどうか、写真で判定できます）<br><br>
+    こちらがサービスのページです 👉 https://yukitchy.github.io/staykey-lp/<br><br>
+    今週でご都合のいい日はありますか？
+  </div>
+  <div class="tip">💡 ポイント：①テスト段階だと<b>先に</b>明かす ②費用の話を<b>こちらから</b>出す ③<b>いつでも戻せる</b>と伝える ④次のアクション（30分の打合せ）を1つだけ示す</div>
+</div></section>
+
+<!-- TODO -->
+<section style="background:linear-gradient(180deg,var(--soft),var(--bg));"><div class="wrap">
+  <div class="sec-h"><span class="sec-n">08</span><h2>いま動かすこと</h2></div>
+  <div class="grid2">
+    <div class="card rv">
+      <h3 class="card-t" style="font-size:15px;color:var(--coral-d);margin-bottom:8px;">🙋 ユウキ</h3>
+      <ul style="margin:0;padding-left:19px;font-size:13.3px;">
+        <li>ソイさんに本計画を共有し、Phase 0の合意を取る</li>
+        <li>かすみさんへメッセージを送る（07章）</li>
+        <li>哲郎さんにも同時に打診するか判断する</li>
+        <li>ヒアリングの日程を押さえる</li>
+      </ul>
+    </div>
+    <div class="card rv">
+      <h3 class="card-t" style="font-size:15px;color:var(--teal-d);margin-bottom:8px;">🔧 ソイさん</h3>
+      <ul style="margin:0;padding-left:19px;font-size:13.3px;">
+        <li>写真から適合を判定する基準を用意する</li>
+        <li>遠隔設置の手順書（写真つき）を用意する</li>
+        <li>締め出し時の緊急手順を決める</li>
+        <li>「よく聞かれること」10件の書き出し（AIサポートの素材）</li>
+      </ul>
+    </div>
+  </div>
+  <div class="note">※ かすみさんの物件種別・部屋数・現在の鍵運用は未確認のため、本計画は一般形で作成しています。Phase 1のヒアリング後に、この計画自体を具体化します。</div>
+</div></section>
+
+<footer><div class="wrap">
+  StayKey テストパイロット計画 ／ 熊本・かすみさん<br>
+  2026.07 ／ ユウキ
+</div></footer>
+
+<script>
+(function(){
+  var t=document.querySelectorAll('.rv');
+  if(!('IntersectionObserver' in window)){t.forEach(function(e){e.classList.add('in');});return;}
+  var io=new IntersectionObserver(function(es){es.forEach(function(e){
+    if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}});},
+    {threshold:.12,rootMargin:'0px 0px -40px 0px'});
+  t.forEach(function(e){io.observe(e);});
+})();
+</script>
+</body>
+</html>
