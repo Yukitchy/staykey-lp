@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>StayKey テストパイロット計画 ─ 熊本・かすみさん</title>
 <meta name="description" content="StayKey 1件目の導入（熊本・かすみさん）の段取り。遠隔導入が成立するかを検証する実験として設計。">
+<meta name="robots" content="noindex,nofollow">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;500;700;800;900&family=Lilita+One&display=swap" rel="stylesheet">
@@ -103,6 +104,39 @@
   .tip{background:var(--soft);border-radius:12px;padding:13px 16px;font-size:13.2px;color:var(--teal-d);font-weight:700;margin-top:14px;}
   .note{background:#fff;border:1px dashed var(--line);border-radius:12px;padding:13px 16px;font-size:12.6px;color:var(--sub);margin-top:14px;}
 
+  /* timeline */
+  .tl{display:flex;flex-direction:column;gap:12px;}
+  .tl-i{display:grid;grid-template-columns:104px 1fr;gap:14px;align-items:start;}
+  .tl-d{font-size:12.5px;font-weight:800;color:var(--teal-d);background:#fff;border:1px solid var(--line);
+    border-radius:10px;padding:8px 10px;text-align:center;box-shadow:var(--sh2);}
+  .tl-d small{display:block;font-weight:700;color:var(--sub);font-size:10.5px;}
+  .tl-c{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 16px;box-shadow:var(--sh2);}
+  .tl-c b{font-size:14.5px;display:block;margin-bottom:3px;}
+  .tl-c p{font-size:13.2px;color:var(--sub);}
+  .tl-i.now .tl-c{border:2px solid var(--coral);background:linear-gradient(180deg,var(--coral-soft),#fff);}
+  .tl-i.now .tl-d{background:var(--coral);color:#fff;border-color:var(--coral);}
+
+  /* profile */
+  .profile{background:var(--card);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--sh);overflow:hidden;}
+  .pf-head{display:flex;align-items:center;gap:13px;padding:16px 20px;background:var(--soft);flex-wrap:wrap;}
+  .pf-av{width:46px;height:46px;border-radius:50%;background:#fff;display:grid;place-items:center;font-size:23px;flex:none;box-shadow:var(--sh2);}
+  .pf-head b{font-size:16px;display:block;line-height:1.4;}
+  .pf-head small{font-size:11.8px;color:var(--sub);font-weight:700;}
+  .pf-badge{margin-left:auto;background:var(--coral);color:#fff;font-size:11.5px;font-weight:800;
+    padding:5px 12px;border-radius:999px;flex:none;}
+  .pf-stats{display:grid;grid-template-columns:repeat(4,1fr);border-bottom:1px solid var(--line);}
+  .pf-stats>div{padding:14px 8px;text-align:center;border-right:1px solid var(--line);}
+  .pf-stats>div:last-child{border-right:none;}
+  .pf-stats .n{display:block;font-size:21px;font-weight:900;color:var(--teal-d);font-variant-numeric:tabular-nums;line-height:1.2;}
+  .pf-stats .n small{font-size:12px;}
+  .pf-stats .l{display:block;font-size:11px;color:var(--sub);font-weight:700;margin-top:2px;}
+  .pf-body{padding:16px 20px 18px;}
+  .pf-body p{font-size:13.4px;color:var(--sub);}
+  .pf-links{display:flex;flex-wrap:wrap;gap:8px;margin-top:13px;}
+  .pf-links a{background:var(--soft);color:var(--teal-d);font-size:12.3px;font-weight:800;
+    padding:7px 13px;border-radius:999px;text-decoration:none;}
+  .pf-links a:hover{background:var(--teal);color:#fff;}
+
   .rv{opacity:0;transform:translateY(22px);transition:opacity .6s var(--ease-out),transform .6s var(--ease-out);}
   .rv.in{opacity:1;transform:none;}
   @media(prefers-reduced-motion:reduce){.rv{opacity:1!important;transform:none!important;transition:none!important;}}
@@ -154,9 +188,102 @@
   <div class="tip rv">💡 提案：<b>哲郎さん（東京・近距離）と同時に走らせる</b>と、近い／遠いの差が数字で出ます。導入にかかる時間の差＝そのまま出張費の根拠になり、価格設計が一気に固まります。</div>
 </div></section>
 
+<!-- 経緯 -->
+<section style="background:linear-gradient(180deg,var(--gold-soft),var(--bg));"><div class="wrap">
+  <div class="sec-h"><span class="sec-n" style="background:var(--gold);color:var(--deep);">02</span><h2>ここまでの経緯</h2></div>
+  <p class="lead">今日いきなり出てきた話ではなく、2年かけて積み上がった関係の上にあります。</p>
+
+  <div class="tl">
+    <div class="tl-i rv"><div class="tl-d">2024.12</div><div class="tl-c">
+      <b>みんらじ #77 / #78 にゲスト出演</b>
+      <p>「開始翌年に震災直撃…どう乗り越えた？」「助成金事業から民泊観光協会運営まで行う原動力とは？」の2本。<b>ここが関係のはじまり。</b></p>
+    </div></div>
+    <div class="tl-i rv"><div class="tl-d">2026.07.27<br><small>午前</small></div><div class="tl-c">
+      <b>電話で「じぶんで補助金」が発火</b>
+      <p>ITや補助金に疎い民泊オーナー向けの<b>補助金伴走事業</b>を共同で立ち上げる話に。1号案件は、かすみさんの物件のシャワー室増設 × 第20回持続化補助金。<b>すでに"組んで事業を作る"関係になっている。</b></p>
+    </div></div>
+    <div class="tl-i rv"><div class="tl-d">2026.07.27<br><small>同日</small></div><div class="tl-c">
+      <b>同じ通話で StayKey にも興味を示す</b>
+      <p>鍵の自動化の話をしたところ関心を持ってくれた。<b>← いまここ</b></p>
+    </div></div>
+    <div class="tl-i rv now"><div class="tl-d">これから</div><div class="tl-c">
+      <b>テストパイロットとして1号導入へ</b>
+      <p>補助金事業と並走する形で、鍵の自動化も一緒に検証する。</p>
+    </div></div>
+  </div>
+
+  <div class="tip rv">💡 <b>ゼロからの営業ではありません。</b>すでに別事業で組んでいる相手なので、「売り込む」のでなく「もう1つ一緒に試す」という自然な流れで話せます。</div>
+</div></section>
+
+<!-- かすみさん紹介 -->
+<section><div class="wrap">
+  <div class="sec-h"><span class="sec-n">03</span><h2>かすみさんとは</h2></div>
+  <p class="lead">結論：<b>テストパイロットとして、これ以上ないほど条件が揃った相手</b>です。</p>
+
+  <div class="profile rv">
+    <div class="pf-head">
+      <div class="pf-av">🏡</div>
+      <div>
+        <b>かすみさん（香寿美）</b>
+        <small>熊本市中央区帯山 ／ 屋号「KASUMI-an（かすみあん）」</small>
+      </div>
+      <span class="pf-badge">スーパーホスト</span>
+    </div>
+    <div class="pf-stats">
+      <div><span class="n">11</span><span class="l">運営物件数</span></div>
+      <div><span class="n">11<small>年</small></span><span class="l">ホスト歴</span></div>
+      <div><span class="n">749</span><span class="l">累計レビュー</span></div>
+      <div><span class="n">★4.84</span><span class="l">平均評価</span></div>
+    </div>
+    <div class="pf-body">
+      <p>息子さんとの親子運営。元保育士で4人の子育て経験があり、赤ちゃん連れ family も安心して泊まれることを打ち出している。マクロビ朝食・レンタカー・送迎など、規模でなく<b>関係性で差別化するタイプ</b>のホスト。</p>
+      <p style="margin-top:8px;"><b>JAMTA熊本支部「泊まんなっせ肥後の会」代表</b>として、地域の民泊事業者 <b>35施設</b> のネットワークを牽引。助成金事業の実務経験もあり。</p>
+      <div class="pf-links">
+        <a href="https://www.airbnb.jp/users/show/48369176" target="_blank" rel="noopener">Airbnbプロフィール ↗</a>
+        <a href="https://kasumian.amebaownd.com/" target="_blank" rel="noopener">KASUMI-an 公式 ↗</a>
+        <a href="https://t-higo.com/" target="_blank" rel="noopener">泊まんなっせ肥後の会 ↗</a>
+      </div>
+    </div>
+  </div>
+
+  <h3 style="font-size:16px;margin:26px 0 10px;">🗝️ なぜ、この人が最適なのか</h3>
+  <div class="grid3">
+    <div class="card rv"><h3 class="card-t" style="font-size:14.5px;color:var(--teal-d);margin-bottom:5px;">① 規模がある</h3>
+      <p style="font-size:13px;color:var(--sub);"><b>11物件</b>。1室で試して問題なければ、そのまま10室へ広げられる。<b>1人の顧客の中に成長の階段がある</b>。</p></div>
+    <div class="card rv"><h3 class="card-t" style="font-size:14.5px;color:var(--teal-d);margin-bottom:5px;">② ネットワークの中心にいる</h3>
+      <p style="font-size:13px;color:var(--sub);">JAMTA熊本支部代表＝<b>35施設への紹介ルート</b>。ここで1件成功すれば、営業せずに広がる可能性がある。</p></div>
+    <div class="card rv"><h3 class="card-t" style="font-size:14.5px;color:var(--teal-d);margin-bottom:5px;">③ 事業を見る目がある</h3>
+      <p style="font-size:13px;color:var(--sub);">助成金事業の実務経験あり。<b>お世辞でない評価</b>が返ってくる＝テストパイロットとして最も価値が高い。</p></div>
+  </div>
+
+  <h3 style="font-size:16px;margin:26px 0 10px;">🏠 運営物件（Airbnb公開分・全11件）</h3>
+  <div class="scroll-x">
+  <table>
+    <tr><th>#</th><th>物件</th><th>タイプ</th><th>定員</th><th>評価</th><th>リンク</th></tr>
+    <tr><td>1</td><td>和室／日本庭園・書院付き</td><td>ゲストハウス個室</td><td>4</td><td>4.84 (239)</td><td><a href="https://www.airbnb.jp/rooms/9413418" target="_blank" rel="noopener">開く ↗</a></td></tr>
+    <tr><td>2</td><td>No.1 個室・ロフト付き</td><td>ゲストハウス個室</td><td>3</td><td>4.86 (190)</td><td><a href="https://www.airbnb.jp/rooms/9319066" target="_blank" rel="noopener">開く ↗</a></td></tr>
+    <tr><td>3</td><td>3／ファミリールーム</td><td>ゲストハウス個室</td><td>4</td><td>4.80 (110)</td><td><a href="https://www.airbnb.jp/rooms/16179185" target="_blank" rel="noopener">開く ↗</a></td></tr>
+    <tr><td>4</td><td>202／公園が近い部屋</td><td>アパート</td><td>6</td><td>4.90 (48)</td><td><a href="https://www.airbnb.jp/rooms/35703552" target="_blank" rel="noopener">開く ↗</a></td></tr>
+    <tr><td>5</td><td>102／完全貸切2DK・北欧タイプ</td><td>アパート（貸切）</td><td>6</td><td>4.82 (45)</td><td><a href="https://www.airbnb.jp/rooms/36007983" target="_blank" rel="noopener">開く ↗</a></td></tr>
+    <tr><td>6</td><td>A201／目の前に公園</td><td>アパート</td><td>6</td><td>4.87 (54)</td><td><a href="https://www.airbnb.jp/rooms/910365035520353471" target="_blank" rel="noopener">開く ↗</a></td></tr>
+    <tr><td>7</td><td>101／マクロビ和食あり</td><td>アパート</td><td>6</td><td>4.86 (49)</td><td><a href="https://www.airbnb.jp/rooms/910375352860108938" target="_blank" rel="noopener">開く ↗</a></td></tr>
+    <tr><td>8</td><td>B102／ペット可・2寝室</td><td>アパート</td><td>6</td><td>4.57 (7)</td><td><a href="https://www.airbnb.jp/rooms/1349651090571996497" target="_blank" rel="noopener">開く ↗</a></td></tr>
+    <tr><td>9</td><td>A203／子どもプレイルーム付き</td><td>アパート</td><td>6</td><td>5.00 (3)</td><td><a href="https://www.airbnb.jp/rooms/1386828196175671866" target="_blank" rel="noopener">開く ↗</a></td></tr>
+    <tr><td>10</td><td>A203／プレイルーム有り</td><td>アパート</td><td>6</td><td>新着</td><td><a href="https://www.airbnb.jp/rooms/1707814669305871782" target="_blank" rel="noopener">開く ↗</a></td></tr>
+    <tr><td>11</td><td>まるで実家／1日1組・天然水の風呂</td><td>一棟貸し<br><b>福岡県筑前町</b></td><td>5</td><td>新着</td><td><a href="https://www.airbnb.jp/rooms/1723654512128529215" target="_blank" rel="noopener">開く ↗</a></td></tr>
+  </table>
+  </div>
+  <div class="note">※ Airbnbの公開情報より（2026年7月時点）。10件が熊本市（拠点は中央区帯山）、1件が福岡県筑前町。料金レンジは個室7千円台〜、アパート1.5〜1.8万円台。</div>
+
+  <div class="warn rv">🎯 <b>ここが狙い目</b>：#1〜#3 の3室は<b>風呂・トイレ・リビングが共用のゲストハウス棟</b>（同時満室で最大11名が1つの風呂を共用）。<br>
+  つまり <b>1つの玄関を、日々入れ替わる複数のゲストが使う</b> ＝ 鍵の受け渡しが最も煩雑な構造で、StayKeyが一番効く場所です。<b>ここを1号にするのが自然。</b></div>
+
+  <div class="tip rv">🔗 <b>補助金PJとの接続</b>：この共用風呂のボトルネックを解消する「シャワー室増設」が、まさに「じぶんで補助金」の1号案件。<b>同じ物件で、水まわりと鍵まわりを同時に良くする</b>提案にできます。</div>
+</div></section>
+
 <!-- PHASES -->
 <section style="background:linear-gradient(180deg,var(--soft),var(--bg));"><div class="wrap">
-  <div class="sec-h"><span class="sec-n">02</span><h2>段取り（5フェーズ）</h2></div>
+  <div class="sec-h"><span class="sec-n">04</span><h2>段取り（5フェーズ）</h2></div>
   <p class="lead">各フェーズに「ここで何が分かればOKか」を置いてあります。ダメなら早く降りるのも成功です。</p>
 
   <div class="phase rv">
@@ -246,7 +373,7 @@
 
 <!-- PRICE -->
 <section><div class="wrap">
-  <div class="sec-h"><span class="sec-n">03</span><h2>無料にするか、いくらもらうか</h2></div>
+  <div class="sec-h"><span class="sec-n">05</span><h2>無料にするか、いくらもらうか</h2></div>
   <p class="lead">ここは先に決めておかないと、後から言い出しにくくなります。3案。</p>
   <div class="grid3">
     <div class="opt rv">
@@ -273,7 +400,7 @@
 
 <!-- PROMISE -->
 <section style="background:linear-gradient(180deg,var(--soft),var(--bg));"><div class="wrap">
-  <div class="sec-h"><span class="sec-n">04</span><h2>約束すること／しないこと</h2></div>
+  <div class="sec-h"><span class="sec-n">06</span><h2>約束すること／しないこと</h2></div>
   <p class="lead">ここを曖昧にすると、あとで必ずこじれます。最初に口頭でも文面でも伝えておく。</p>
   <div class="yes-no">
     <div class="yn y rv">
@@ -300,7 +427,7 @@
 
 <!-- MEASURE -->
 <section><div class="wrap">
-  <div class="sec-h"><span class="sec-n">05</span><h2>計測すること＝この実験の本当の成果物</h2></div>
+  <div class="sec-h"><span class="sec-n">07</span><h2>計測すること＝この実験の本当の成果物</h2></div>
   <p class="lead">「うまくいった／いかなかった」の感想でなく、次の判断に使える数字を持ち帰ります。</p>
   <div class="scroll-x">
   <table>
@@ -318,7 +445,7 @@
 
 <!-- EXIT -->
 <section style="background:linear-gradient(180deg,var(--coral-soft),var(--bg));"><div class="wrap">
-  <div class="sec-h"><span class="sec-n">06</span><h2>撤退ライン（先に決めておく）</h2></div>
+  <div class="sec-h"><span class="sec-n">08</span><h2>撤退ライン（先に決めておく）</h2></div>
   <p class="lead">「やめどき」を最初に決めておくと、情に引きずられず冷静に判断できます。</p>
   <div class="grid3">
     <div class="card rv"><h3 class="card-t" style="font-size:14.5px;margin-bottom:5px;">🚪 ドアに付かない</h3>
@@ -332,7 +459,7 @@
 
 <!-- MESSAGE -->
 <section><div class="wrap">
-  <div class="sec-h"><span class="sec-n">07</span><h2>かすみさんに送るメッセージ（案）</h2></div>
+  <div class="sec-h"><span class="sec-n">09</span><h2>かすみさんに送るメッセージ（案）</h2></div>
   <p class="lead">「お願い」ではなく「一緒に作りませんか」の立て付けにすると通りやすいです。</p>
   <div class="msg rv">
     <div class="h">▼ そのまま使える文面（LINE / メッセンジャー）</div>
@@ -350,7 +477,7 @@
 
 <!-- TODO -->
 <section style="background:linear-gradient(180deg,var(--soft),var(--bg));"><div class="wrap">
-  <div class="sec-h"><span class="sec-n">08</span><h2>いま動かすこと</h2></div>
+  <div class="sec-h"><span class="sec-n">10</span><h2>いま動かすこと</h2></div>
   <div class="grid2">
     <div class="card rv">
       <h3 class="card-t" style="font-size:15px;color:var(--coral-d);margin-bottom:8px;">🙋 ユウキ</h3>
