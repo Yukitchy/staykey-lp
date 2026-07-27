@@ -282,6 +282,45 @@
   .pc p{font-size:12.8px;color:var(--sub);}
   .pricenote{text-align:center;color:var(--sub);font-size:13px;margin-top:18px;}
 
+  /* pricing tables */
+  .sub-h{font-size:19px;font-weight:900;text-align:center;margin:34px 0 8px;}
+  .ptable{background:#fff;border:1px solid var(--line);border-radius:var(--r);
+    box-shadow:var(--sh2);overflow:hidden;margin-bottom:14px;}
+  .pt-h{background:var(--teal-d);color:#fff;font-weight:900;font-size:14.5px;padding:12px 18px;}
+  .pt-h.alt{background:var(--coral);}
+  table.ptbl{width:100%;border-collapse:collapse;font-size:14px;}
+  table.ptbl th{background:#F3F7F6;color:var(--sub);font-size:12px;font-weight:800;
+    padding:9px 18px;text-align:left;}
+  table.ptbl td{padding:12px 18px;border-bottom:1px solid var(--line);}
+  table.ptbl tr:last-child td{border-bottom:none;}
+  table.ptbl td.p{text-align:right;font-weight:900;color:var(--teal-d);
+    font-variant-numeric:tabular-nums;white-space:nowrap;font-size:16px;}
+  table.ptbl td.p span{font-size:12.5px;font-weight:800;margin-left:1px;}
+  .pt-n{padding:11px 18px 14px;font-size:12.4px;color:var(--sub);background:#FAFCFB;}
+
+  /* comparison */
+  .cmp{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:16px;}
+  .cmp-c{border-radius:var(--r);padding:18px;box-shadow:var(--sh2);}
+  .cmp-c.self{background:linear-gradient(180deg,var(--teal-soft),#fff);border:2px solid var(--teal);}
+  .cmp-c.other{background:#F6F4F1;border:1px solid var(--line);}
+  .cmp-t{display:inline-block;font-size:13px;font-weight:900;padding:5px 12px;border-radius:999px;margin-bottom:11px;}
+  .cmp-c.self .cmp-t{background:var(--teal);color:#fff;}
+  .cmp-c.other .cmp-t{background:#DDD6CC;color:#6b6152;}
+  ul.tick,ul.cross{list-style:none;margin:0;padding:0;}
+  ul.tick li,ul.cross li{font-size:13.4px;padding-left:25px;position:relative;margin:7px 0;line-height:1.7;}
+  ul.tick li::before{content:"✅";position:absolute;left:0;}
+  ul.cross li{color:var(--sub);}
+  ul.cross li::before{content:"▪️";position:absolute;left:2px;}
+
+  /* saving */
+  .save{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px;}
+  .sv{background:#fff;border:1px solid var(--line);border-left:5px solid var(--gold);
+    border-radius:14px;padding:16px 18px;box-shadow:var(--sh2);}
+  .sv-b{font-size:13.6px;font-weight:900;color:var(--ink);}
+  .sv-n{font-size:13px;color:var(--sub);margin:5px 0 8px;}
+  .sv-n b{color:var(--coral-d);font-size:14.5px;}
+  .sv-a{font-size:13.2px;font-weight:800;color:var(--teal-d);}
+
   /* voices */
   .samplebar{background:#FFF6E0;border:1.5px dashed var(--gold);border-radius:12px;padding:10px 14px;
     font-size:12.5px;font-weight:700;color:#8a6a1e;text-align:center;margin-bottom:18px;}
@@ -339,7 +378,7 @@
   @media(max-width:680px){
     .hero .wrap{grid-template-columns:1fr;} .phone{order:-1;width:210px;}
     .hero h1{font-size:27px;} .sec-t{font-size:21px;}
-    .pains,.steps,.ba,.places,.price,.voices{grid-template-columns:1fr;}
+    .pains,.steps,.ba,.places,.price,.voices,.cmp,.save{grid-template-columns:1fr;}
     .places{grid-template-columns:1fr 1fr;}
   }
   @media(prefers-reduced-motion:reduce){.phone{animation:none;} *{transition:none!important;}}
@@ -505,11 +544,67 @@
 <section class="soft"><div class="wrap">
   <h2 class="sec-t" data-i18n="pr_h">料金 💴</h2>
   <p class="sec-lead" data-i18n="pr_lead">「初期の導入代行」＋「月々の安心サポート」の2本立て。</p>
-  <div class="price">
-    <div class="pc"><div class="lab" data-i18n="pr1_l">はじめに（1回）</div><div class="big" data-i18n="pr1_t">初期セットアップ</div><p data-i18n="pr1_d">機器＋設置＋設定＋予約サイト連携まで、まるごと代行。規模に応じてお見積り。</p></div>
-    <div class="pc"><div class="lab" data-i18n="pr2_l">毎月</div><div class="big" data-i18n="pr2_t">月額サポート</div><p data-i18n="pr2_d">見守り・不具合対応・AIサポート・アップデート。物件/ロック数に応じて。</p></div>
+
+  <div class="ptable">
+    <div class="pt-h" data-i18n="pt1_h">はじめに（1回だけ）</div>
+    <div class="scroll-x"><table class="ptbl">
+      <tr><th data-i18n="pt_kibo">規模</th><th data-i18n="pt_kin">料金（税込）</th></tr>
+      <tr><td data-i18n="pt1_r1">1施設・カギ1台</td><td class="p">30,000<span data-i18n="pt_en">円</span></td></tr>
+      <tr><td data-i18n="pt1_r2">1施設・カギ2〜3台</td><td class="p">50,000〜60,000<span data-i18n="pt_en">円</span></td></tr>
+      <tr><td data-i18n="pt1_r3">複数施設・4台以上</td><td class="p" data-i18n="pt1_v3">80,000円〜（要見積り）</td></tr>
+    </table></div>
+    <p class="pt-n" data-i18n="pt1_n">機器の選定・購入代行／設置・初期設定／予約サイト連携／動作テストまで、ぜんぶ含みます。</p>
   </div>
-  <p class="pricenote" data-i18n="pr_note">💬 料金はお部屋の数・使い方でお見積りします。<b>まずは無料相談から</b>どうぞ。</p>
+
+  <div class="ptable">
+    <div class="pt-h alt" data-i18n="pt2_h">毎月（安心サポート）</div>
+    <div class="scroll-x"><table class="ptbl">
+      <tr><th data-i18n="pt_kibo">規模</th><th data-i18n="pt_kin">料金（税込）</th></tr>
+      <tr><td data-i18n="pt2_r1">1施設・カギ1台</td><td class="p">4,980<span data-i18n="pt_en">円</span></td></tr>
+      <tr><td data-i18n="pt2_r2">1施設・カギ2〜3台</td><td class="p">7,800<span data-i18n="pt_en">円</span></td></tr>
+      <tr><td data-i18n="pt2_r3">複数施設まとめて管理</td><td class="p" data-i18n="pt2_v3">9,800円〜（台数で加算）</td></tr>
+    </table></div>
+    <p class="pt-n" data-i18n="pt2_n">見守り・不具合対応・24時間AIサポート・アップデート追従。</p>
+  </div>
+
+  <h3 class="sub-h" data-i18n="cmp_h">「他より高い」と感じたときは 🤔</h3>
+  <p class="sec-lead" data-i18n="cmp_lead">くらべる相手が違います。他社は<b>ツールを買って自分で設定する</b>商品。うちは<b>手間ごと引き受ける</b>サービスです。</p>
+  <div class="cmp">
+    <div class="cmp-c self">
+      <span class="cmp-t" data-i18n="cmp_self_t">StayKey</span>
+      <ul class="tick">
+        <li data-i18n="cmp_s1">機器えらび・購入も代行</li>
+        <li data-i18n="cmp_s2">設置・設定・予約サイト連携まで代行</li>
+        <li data-i18n="cmp_s3">困ったら人が対応（AI一次サポート付き）</li>
+        <li data-i18n="cmp_s4">あなたの作業は<b>ゼロ</b></li>
+      </ul>
+    </div>
+    <div class="cmp-c other">
+      <span class="cmp-t" data-i18n="cmp_oth_t">一般的なスマートロック（月750〜990円〜）</span>
+      <ul class="cross">
+        <li data-i18n="cmp_o1">機器は自分で買う</li>
+        <li data-i18n="cmp_o2">設置・設定・連携は<b>自分でやる</b></li>
+        <li data-i18n="cmp_o3">つまずいたら自分で調べる</li>
+        <li data-i18n="cmp_o4">安いぶん、手間は自分持ち</li>
+      </ul>
+    </div>
+  </div>
+
+  <h3 class="sub-h" data-i18n="save_h">こう考えると、じつは安いです 💡</h3>
+  <div class="save">
+    <div class="sv">
+      <div class="sv-b" data-i18n="sv1_b">深夜まで鍵を渡すために待つ</div>
+      <div class="sv-n" data-i18n="sv1_n">時給1,000円 × 3時間 ＝ <b>1回3,000円</b></div>
+      <div class="sv-a" data-i18n="sv1_a">→ 月2回で元が取れます</div>
+    </div>
+    <div class="sv">
+      <div class="sv-b" data-i18n="sv2_b">鍵をなくされて交換</div>
+      <div class="sv-n" data-i18n="sv2_n">シリンダー交換 <b>15,000〜30,000円</b></div>
+      <div class="sv-a" data-i18n="sv2_a">→ そもそも物理キーがありません</div>
+    </div>
+  </div>
+
+  <p class="pricenote" data-i18n="pr_note">💬 お部屋の数・使い方によって変わります。<b>まずは無料相談から</b>どうぞ。</p>
 </div></section>
 
 <!-- VOICES -->
@@ -649,6 +744,33 @@
       pr1_l:'One-time', pr1_t:'Initial setup', pr1_d:'Hardware, installation, configuration and booking-site integration — all done for you. Quoted by size.',
       pr2_l:'Monthly', pr2_t:'Ongoing support', pr2_d:'Monitoring, troubleshooting, AI support and updates. Based on properties / locks.',
       pr_note:'💬 We quote based on your number of rooms and how you use them. <b>Start with a free consult.</b>',
+      pt1_h:'One-time setup', pt_kibo:'Size', pt_kin:'Price (incl. tax)', pt_en:' yen',
+      pt1_r1:'1 property, 1 lock', pt1_r2:'1 property, 2–3 locks', pt1_r3:'Multiple properties, 4+ locks',
+      pt1_v3:'From 80,000 yen (quoted)',
+      pt1_n:'Includes hardware selection & purchase, installation, configuration, booking-site integration and testing.',
+      pt2_h:'Monthly support', pt2_r1:'1 property, 1 lock', pt2_r2:'1 property, 2–3 locks',
+      pt2_r3:'Multiple properties, managed together', pt2_v3:'From 9,800 yen (per lock)',
+      pt2_n:'Monitoring, troubleshooting, 24h AI support and update maintenance.',
+      cmp_h:'If it looks expensive 🤔',
+      cmp_lead:'You are comparing the wrong thing. Others sell <b>a tool you set up yourself</b>. We take <b>the whole job</b> off your hands.',
+      cmp_self_t:'StayKey',
+      cmp_s1:'We choose and buy the hardware for you',
+      cmp_s2:'We install, configure and connect your booking sites',
+      cmp_s3:'A human answers when you are stuck (AI support first)',
+      cmp_s4:'Your workload: <b>zero</b>',
+      cmp_oth_t:'Typical smart locks (from 750–990 yen/mo)',
+      cmp_o1:'You buy the hardware',
+      cmp_o2:'You install, configure and connect it <b>yourself</b>',
+      cmp_o3:'You research it yourself when stuck',
+      cmp_o4:'Cheaper — because the work is yours',
+      save_h:'Looked at this way, it is cheap 💡',
+      sv1_b:'Staying up late to hand over keys',
+      sv1_n:'1,000 yen/h × 3 hours = <b>3,000 yen each time</b>',
+      sv1_a:'→ Twice a month and it pays for itself',
+      sv2_b:'A lost key means a new cylinder',
+      sv2_n:'Cylinder replacement <b>15,000–30,000 yen</b>',
+      sv2_a:'→ There is no physical key to lose',
+
       rc_h:'Customer voices 🗣️', rc_t:'Looking for our first cases!',
       rc_d:'We are looking for the first owners to try StayKey.<br>"Just one room" is very welcome. Be our first review.',
       vo_lead:'The kind of feedback we expect from owners who install StayKey.',
@@ -750,6 +872,33 @@
       pr1_l:'首次（一次性）', pr1_t:'初期设置', pr1_d:'设备＋安装＋设置＋预约网站对接，全部代为完成。依规模报价。',
       pr2_l:'每月', pr2_t:'月度支持', pr2_d:'运行监控・故障处理・AI支持・版本更新。依房源／锁的数量而定。',
       pr_note:'💬 费用将依房间数量与使用方式报价。<b>欢迎先免费咨询。</b>',
+      pt1_h:'首次（一次性）', pt_kibo:'规模', pt_kin:'费用（含税）', pt_en:'日元',
+      pt1_r1:'1处设施・1把锁', pt1_r2:'1处设施・2〜3把锁', pt1_r3:'多处设施・4把以上',
+      pt1_v3:'80,000日元起（另行报价）',
+      pt1_n:'包含设备选定与代购／安装与初期设置／预约网站对接／运行测试。',
+      pt2_h:'每月（安心支持）', pt2_r1:'1处设施・1把锁', pt2_r2:'1处设施・2〜3把锁',
+      pt2_r3:'多处设施统一管理', pt2_v3:'9,800日元起（按数量加算）',
+      pt2_n:'运行监控・故障处理・24小时AI支持・版本更新。',
+      cmp_h:'如果觉得"比别家贵" 🤔',
+      cmp_lead:'比较的对象不同。别家卖的是<b>需要自己设置的工具</b>，我们承担的是<b>整个麻烦</b>。',
+      cmp_self_t:'StayKey',
+      cmp_s1:'设备的挑选与购买都由我们代办',
+      cmp_s2:'安装・设置・预约网站对接全部代办',
+      cmp_s3:'遇到问题有人对应（先由AI一次支持）',
+      cmp_s4:'您需要做的事：<b>零</b>',
+      cmp_oth_t:'一般的智能锁（月750〜990日元起）',
+      cmp_o1:'设备需自行购买',
+      cmp_o2:'安装・设置・对接需<b>自己完成</b>',
+      cmp_o3:'遇到问题需自行查找',
+      cmp_o4:'便宜的代价是自己费工夫',
+      save_h:'这样一算，其实很划算 💡',
+      sv1_b:'为交钥匙等到深夜',
+      sv1_n:'时薪1,000日元 × 3小时 = <b>每次3,000日元</b>',
+      sv1_a:'→ 每月2次就回本了',
+      sv2_b:'钥匙遗失需更换锁芯',
+      sv2_n:'更换锁芯 <b>15,000〜30,000日元</b>',
+      sv2_a:'→ 根本不存在实体钥匙',
+
       rc_h:'客户评价 🗣️', rc_t:'正在招募首批导入案例！',
       rc_d:'我们正在寻找最早使用StayKey的经营者。<br>"只想先试一个房间"也非常欢迎，期待您成为第一位使用者。',
       vo_lead:'以下是导入StayKey的经营者可能给出的评价示例。',

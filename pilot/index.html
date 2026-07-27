@@ -120,6 +120,17 @@
   .br-note{display:inline-block;background:var(--gold-soft);color:#8a6a1e;font-size:11px;
     font-weight:800;padding:2px 8px;border-radius:6px;margin-left:4px;}
 
+  /* 価格ボックス */
+  .pricebox{background:#fff;border:1px solid var(--line);border-radius:var(--r);
+    box-shadow:var(--sh2);overflow:hidden;margin-top:16px;}
+  .pb-h{background:var(--deep);color:#fff;font-weight:900;font-size:13.5px;padding:11px 18px;}
+  .pb-b{padding:0;}
+  .pb-b table{border-radius:0;}
+  .pb-n{padding:12px 18px 14px;font-size:12.4px;color:var(--sub);background:#FAFCFB;}
+  td.num{text-align:right;font-weight:800;color:var(--teal-d);
+    font-variant-numeric:tabular-nums;white-space:nowrap;}
+  .opt .price small{display:block;color:var(--sub);font-weight:800;}
+
   /* profile */
   .profile{background:var(--card);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--sh);overflow:hidden;}
   .pf-head{display:flex;align-items:center;gap:13px;padding:16px 20px;background:var(--soft);flex-wrap:wrap;}
@@ -385,12 +396,44 @@
     </div>
     <div class="opt rv">
       <span class="tag">案C</span>
-      <h3>通常価格の半額</h3>
-      <div class="price">要設定</div>
-      <p>価格が未確定の今は決めづらい。<b>価格を検証する前に価格を提示してしまう</b>矛盾がある。</p>
+      <h3>正規価格の半額</h3>
+      <div class="price">初期15,000円<br><small style="font-size:13px;">＋月2,490円</small></div>
+      <p>正規（初期30,000＋月4,980）の半額。<b>1件目にいきなり請求するのは重い</b>。金額を検証する前に金額を固定してしまう面もある。</p>
     </div>
   </div>
   <div class="tip">💡 <b>案Bを推す理由</b>：これはテストなので、こちらが受け取るべき対価は「お金」ではなく<b>フィードバックと事例掲載の許可</b>です。それを最初にはっきり伝えると、かすみさんも協力しやすくなります。</div>
+
+  <div class="pricebox rv">
+    <div class="pb-h">📋 参考：正規の価格（2026/07 ソイさん決定）</div>
+    <div class="pb-b">
+      <div class="scroll-x"><table>
+        <tr><th>規模</th><th>初期（1回）</th><th>月額</th></tr>
+        <tr><td>1施設・カギ1台</td><td class="num">30,000円</td><td class="num">4,980円</td></tr>
+        <tr><td>1施設・カギ2〜3台</td><td class="num">50,000〜60,000円</td><td class="num">7,800円</td></tr>
+        <tr><td>複数施設・4台以上</td><td class="num">80,000円〜</td><td class="num">9,800円〜</td></tr>
+      </table></div>
+      <p class="pb-n">※ 月額の下限は当初案の3,000円から<b>4,980円へ引き上げ</b>。セサミBizプランの原価・決済手数料・サポート人件費を積むと3,000円では薄利すぎるため（ソイさん判断）。</p>
+    </div>
+  </div>
+
+  <div class="warn rv">💰 <b>かすみさんは11室運営</b>。もし全室に広げると「複数施設・4台以上」＝<b>初期8万円〜＋月9,800円〜</b>のレンジに入ります。1室のテストが、そのまま<b>年間12万円規模の商談</b>につながる位置づけです。</div>
+
+  <h3 style="font-size:16px;margin:26px 0 10px;">🆚 競合と比べて高く見えないか</h3>
+  <p class="lead">ソイさんの調査結果。<b>比較の土俵が違う</b>ことを、こちらから先に説明しておく必要があります。</p>
+  <div class="scroll-x">
+  <table>
+    <tr><th>サービス</th><th>月額</th><th>性格</th></tr>
+    <tr><td>RemoteLOCK</td><td class="num">990円〜</td><td>Airbnb連携あり。<b>自分で設定する</b>セルフサービス型</td></tr>
+    <tr><td>LINKEY Plus</td><td class="num">750円〜</td><td>同上。業界最安クラス</td></tr>
+    <tr><td>Akerun</td><td class="num">リース制</td><td>初期費用ゼロだが月額は機器代込みで高め</td></tr>
+    <tr style="background:var(--soft)!important;"><td><b>StayKey</b></td><td class="num"><b>4,980円〜</b></td><td><b>機器選定・設置・設定・連携・サポートまで丸ごと代行</b></td></tr>
+  </table>
+  </div>
+  <div class="note">出典：OREND民泊スマートロック比較／キャククル比較記事（ソイさん調べ）</div>
+  <div class="tip rv">🎯 <b>ここが肝</b>：他社は「ツールを契約して、自分でダッシュボードを設定する」商品。StayKeyが売っているのは<b>「手間を丸投げできる安心」</b>です。<br>
+  比較対象がRemoteLOCKの990円になった瞬間に価値が伝わらなくなり、値崩れします。<b>だから"痛みの回避額"で説明する</b>：<br>
+  ・深夜待機の人件費（時給1,000円×3時間＝<b>1回3,000円</b>）vs 月4,980円で無制限に自動化<br>
+  ・鍵紛失時のシリンダー交換（<b>15,000〜30,000円</b>）vs そもそも物理キーが存在しない</div>
 </div></section>
 
 <!-- PROMISE -->
@@ -482,6 +525,14 @@
         <li>哲郎さんにも同時に打診するか判断する</li>
         <li>ヒアリングの日程を押さえる</li>
       </ul>
+    </div>
+    <div class="card rv" style="grid-column:1/-1;border-left:5px solid var(--coral);">
+      <h3 class="card-t" style="font-size:15px;color:var(--coral-d);margin-bottom:6px;">💬 ソイさんの問い「この価格、LPに反映する？ それとも個別見積りのまま？」への回答</h3>
+      <p style="font-size:13.4px;color:var(--sub);"><b>→ 反映しました（価格を出す方）。</b>理由は3つ：<br>
+      ① 非リテラシー層は「いくらか分からない」と<b>問い合わせる前に離脱</b>する（LPの設計思想そのもの）<br>
+      ② 金額を出さないと、見た人が勝手に競合の990円と比べてしまう。<b>先にこちらの土俵を示す</b>ほうが強い<br>
+      ③ 「規模に応じて」と幅を持たせてあるので、個別見積りの余地は残っている<br>
+      <b>ただし最終判断はソイさん</b>。出したくなければ元の「お見積り」表記に戻せます。</p>
     </div>
     <div class="card rv">
       <h3 class="card-t" style="font-size:15px;color:var(--teal-d);margin-bottom:8px;">🔧 ソイさん</h3>
