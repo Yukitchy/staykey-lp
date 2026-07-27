@@ -28,7 +28,26 @@
   *{box-sizing:border-box;margin:0;padding:0;}
   body{background:var(--bg);color:var(--ink);
     font-family:var(--font-jp);font-weight:500;
-    line-height:1.9;-webkit-font-smoothing:antialiased;word-break:auto-phrase;overflow-x:hidden;}
+    line-height:1.9;-webkit-font-smoothing:antialiased;overflow-x:hidden;}
+
+  /* === 日本語の折返し（変な位置で切らない）=== */
+  /* auto-phrase = 文節の切れ目で折る。全要素に効かせる */
+  body,p,li,td,th,div,span,b,small,summary,button,a,h1,h2,h3,h4{
+    word-break:auto-phrase;
+    line-break:strict;              /* 禁則処理を厳格に */
+    overflow-wrap:anywhere;         /* 長いURL等だけは折る */
+  }
+  /* 短い文・見出し・ボタン類は行数を均等にして"1文字だけ次行"を防ぐ */
+  h1,h2,h3,h4,.btn,.chip,.pill,.noapp,.clean,.v-star,.tag,.eyebrow,
+  .sec-t,.sec-lead,.stp h3,.stp p,.pain h3,.pl b,.pl small,.dp-hint,
+  .dp-badge,.j-tip,.cc-lab,.samplebar,.micro,.demo-note,.pricenote{
+    text-wrap:balance;
+  }
+  /* 本文は最後の行が1単語にならないように */
+  p,.v-txt,.m-body,.fl p,.opt p,.pc p{ text-wrap:pretty; }
+  /* 強調(<b>)は狭い箱でも途中で割らない＝「予約した時間だ/け」事故の防止 */
+  .dp-hint b,.j-tip b,.noapp b,.clean b,.micro b,.cc-lab b,.samplebar b,
+  .pricenote b,.demo-note b,.hero .micro b{ white-space:nowrap; }
   h1,h2,h3{font-weight:900;}
   .en-disp{font-family:var(--font-en);font-weight:400;letter-spacing:.02em;}
 
@@ -73,8 +92,24 @@
   .hero .micro b{color:var(--teal-d);}
 
   /* phone */
-  .phone{width:230px;justify-self:center;background:#0f1a1c;border-radius:34px;padding:9px;box-shadow:0 24px 50px rgba(20,60,60,.28);animation:float 5s ease-in-out infinite;}
-  @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+  /* 端末モック：ループ animation はしない（酔うので禁止）。
+     代わりに「後光 + 傾き + 多段の影」で存在感を出し、登場時に一度だけ動く */
+  .phone-stage{position:relative;justify-self:center;display:grid;place-items:center;}
+  .phone-stage::before{content:"";position:absolute;width:300px;height:300px;border-radius:50%;
+    background:radial-gradient(circle,rgba(14,158,154,.22),rgba(255,194,75,.12) 45%,transparent 70%);
+    filter:blur(6px);z-index:0;}
+  .phone{position:relative;z-index:1;width:230px;background:#0f1a1c;border-radius:34px;padding:9px;
+    transform:perspective(1200px) rotateY(-7deg) rotateX(2deg);
+    box-shadow:
+      0 2px 6px rgba(20,60,60,.10),
+      0 14px 28px rgba(20,60,60,.16),
+      0 36px 60px rgba(20,60,60,.22);
+    animation:phone-in .9s var(--ease-out) both;}
+  @keyframes phone-in{
+    from{opacity:0;transform:perspective(1200px) rotateY(-7deg) rotateX(2deg) translateY(26px) scale(.97);}
+    to  {opacity:1;transform:perspective(1200px) rotateY(-7deg) rotateX(2deg) translateY(0) scale(1);}
+  }
+  @media(prefers-reduced-motion:reduce){.phone{animation:none;}}
   .phone .scr{background:linear-gradient(170deg,var(--teal-soft),#fff);border-radius:26px;overflow:hidden;height:420px;display:flex;flex-direction:column;}
   .phone .top{background:linear-gradient(120deg,var(--teal),var(--teal-d));color:#fff;padding:16px 16px 14px;}
   .phone .top small{opacity:.85;font-size:10px;font-weight:700;}
@@ -346,15 +381,17 @@
     </div>
     <p class="micro" data-i18n="hero_micro">🔧 むずかしい設定は<b>ぜんぶこちらで</b>。あなたは掃除だけでOK。</p>
   </div>
-  <div class="phone"><div class="scr">
+  <div class="phone-stage">
+   <div class="phone"><div class="scr">
     <div class="top"><small data-i18n="ph_room">CANAL PALACE ・ 302号室</small><b data-i18n="ph_title">お部屋のカギ</b></div>
     <div class="body">
       <div class="lockbig">🔓</div>
       <div class="ok" data-i18n="ph_ok">解錠しました</div>
-      <div class="sub2" data-i18n="ph_sub">ご予約の時間（10:00〜13:00）だけ<br>開けられます</div>
+      <div class="sub2" data-i18n="ph_sub">10:00 – 13:00 のあいだだけ<br>ひらけます</div>
       <div class="pill" data-i18n="ph_pill">アプリ不要 ・ Webでひらく</div>
     </div>
-  </div></div>
+   </div></div>
+  </div>
 </div></div>
 
 <!-- PAINS -->
@@ -570,7 +607,7 @@
       hero_cta1:'Get a free consult', hero_cta2:'See how it works',
       hero_micro:'🔧 <b>We handle all the tricky setup.</b> You just clean the room.',
       ph_room:'CANAL PALACE ・ Room 302', ph_title:'Your room key',
-      ph_ok:'Unlocked', ph_sub:'Valid only during your booking<br>(10:00–13:00)', ph_pill:'No app ・ Opens in your browser',
+      ph_ok:'Unlocked', ph_sub:'Openable only during<br>10:00 – 13:00', ph_pill:'No app ・ Opens in your browser',
       pain_h:'Sound familiar? 😥', pain_lead:'Every key headache, gone — automatically.',
       pain1_t:'Late-night key handovers', pain1_d:'Waiting up at home for a guest who "might arrive around midnight."',
       pain2_t:'The same keybox code, forever', pain2_d:'Reusing one 4-digit PIN for every guest. Honestly a bit worrying.',
@@ -658,7 +695,7 @@
       j3_deny_h:'It did not open', j3_deny_p:'We could not find that booking.<br>Without a booking, or outside your time slot, the door stays locked.',
       j3_back:'Try again', j3_load:'Checking your booking…',
       j3_open_h:'Unlocked', j3_open_p:'Welcome to Room 302.<br>It locks itself automatically after 13:15.',
-      j3_open_hint:'✅ Zero key handover ・ <b>only during your booking</b>',
+      j3_open_hint:'✅ Zero key handover<br><b>Only during your booking</b>',
       restart:'↺ Start over'
     },
     zh: {
@@ -671,7 +708,7 @@
       hero_cta1:'免费咨询', hero_cta2:'查看使用方法',
       hero_micro:'🔧 复杂的设置<b>全部由我们完成</b>。您只需要打扫房间。',
       ph_room:'CANAL PALACE ・ 302号房', ph_title:'房间钥匙',
-      ph_ok:'已开锁', ph_sub:'仅在预约时段（10:00〜13:00）<br>可以开启', ph_pill:'无需App ・ 网页即可开锁',
+      ph_ok:'已开锁', ph_sub:'仅在 10:00 – 13:00<br>可以开启', ph_pill:'无需App ・ 网页即可开锁',
       pain_h:'您是否也遇到过？ 😥', pain_lead:'关于钥匙的烦恼，全部自动消除。',
       pain1_t:'深夜交接钥匙', pain1_d:'为了不知道几点抵达的客人，在家里等到深夜。',
       pain2_t:'密码盒的号码一直不变', pain2_d:'4位密码长期重复使用……说实话有点不安。',
@@ -759,7 +796,7 @@
       j3_deny_h:'未能开启', j3_deny_p:'未能确认到该预约号码。<br>没有预约或超出时段将无法开锁。',
       j3_back:'再试一次', j3_load:'正在确认预约…',
       j3_open_h:'已开锁', j3_open_p:'欢迎来到302号房。<br>13:15之后将自动上锁。',
-      j3_open_hint:'✅ 零钥匙交接 ・ <b>仅限预约时段</b>',
+      j3_open_hint:'✅ 零钥匙交接<br><b>仅限预约时段</b>',
       restart:'↺ 从头再看一次'
     }
   };
@@ -784,7 +821,7 @@
     j3_deny_h:'あきませんでした', j3_deny_p:'ご予約が確認できない番号です。<br>予約のない方・時間外は解錠できません。',
     j3_back:'もう一度ためす', j3_load:'ご予約を確認しています…',
     j3_open_h:'解錠しました', j3_open_p:'ようこそ、302号室へ。<br>13:15を過ぎると自動で施錠されます。',
-    j3_open_hint:'✅ 鍵の受け渡しゼロ ・ <b>予約した時間だけ</b>',
+    j3_open_hint:'✅ 鍵の受け渡しゼロ<br><b>予約した時間だけ</b>',
     restart:'↺ 最初から見る'
   };
 
