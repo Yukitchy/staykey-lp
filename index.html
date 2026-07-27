@@ -44,7 +44,9 @@
     text-wrap:balance;
   }
   /* 本文は最後の行が1単語にならないように */
-  p,.v-txt,.m-body,.fl p,.opt p,.pc p{ text-wrap:pretty; }
+  p,.v-txt,.m-body,.fl p,.opt p,.pc p,.faq .a,.draftbar,footer .wrap{ text-wrap:pretty; }
+  /* 帯・フッターは短文なので行数を均等に割る */
+  .draftbar,footer .wrap,.faq .a{ text-wrap:balance; }
   /* 強調(<b>)は狭い箱でも途中で割らない＝「予約した時間だ/け」事故の防止 */
   .dp-hint b,.j-tip b,.noapp b,.clean b,.micro b,.cc-lab b,.samplebar b,
   .pricenote b,.demo-note b,.hero .micro b{ white-space:nowrap; }
@@ -582,7 +584,7 @@
   </div>
 </div></section>
 
-<footer><div class="wrap" data-i18n="foot">StayKey（ステイキー）｜ 鍵の自動化 導入代行サービス（ドラフト）<br>A fresh key for every stay. ─ 泊まるたび、新しいカギを。 ／ 2026</div></footer>
+<footer><div class="wrap" data-i18n="foot">StayKey ｜ 鍵の自動化 導入代行サービス（ドラフト）<br>A fresh key for every stay.<br>© 2026</div></footer>
 
 <div class="modal" id="modal"><div class="mbox">
   <div class="e">🕊️</div>
@@ -676,7 +678,7 @@
       fin_p:'Start with a free consult. Let us check together whether it fits your property.<br>Trying it on a single room is perfectly fine.',
       fin_btn:'Get a free consult 🕊️',
       fin_re:'🔒 We customise SESAME smart locks to fit your business.',
-      foot:'StayKey ｜ Key automation, set up for you (draft)<br>A fresh key for every stay. ／ 2026',
+      foot:'StayKey ｜ Key automation, set up for you (draft)<br>A fresh key for every stay.<br>© 2026',
       mo_h:'Thank you for reaching out!', mo_p:'(This is a proposal draft.)<br>In the live version, a contact form or chat button appears here.', mo_btn:'Close',
       /* --- demo --- */
       s1:'Book', s2:'Email', s3:'Unlock',
@@ -777,7 +779,7 @@
       fin_p:'欢迎先免费咨询，我们一起确认是否适合您的房源。<br>"只试一个房间"也非常欢迎。',
       fin_btn:'免费咨询 🕊️',
       fin_re:'🔒 我们会将SESAME智能锁定制为贵公司专属的方案。',
-      foot:'StayKey ｜ 钥匙自动化 导入代理服务（草稿）<br>A fresh key for every stay. ─ 每一次入住，都有专属的钥匙。 ／ 2026',
+      foot:'StayKey ｜ 钥匙自动化 导入代理服务（草稿）<br>A fresh key for every stay.<br>© 2026',
       mo_h:'感谢您的咨询！', mo_p:'（这是提案用的草稿。）<br>正式上线时，此处会显示咨询表单或聊天按钮。', mo_btn:'关闭',
       /* --- demo --- */
       s1:'预约', s2:'邮件', s3:'开锁',
