@@ -180,12 +180,29 @@
 <script>
 (function(){
   var LS='staykey_demo_cfg';
-  var cfg={api:'',uuid:'',sec:'',room:'CANAL PALACE ・ 302号室',code:'4821'};
+  var cfg={api:'',uuid:'',sec:'',name:'デモ用スマートロック',room:'CANAL PALACE ・ 302号室',code:'4821'};
   try{ var raw=localStorage.getItem(LS); if(raw) cfg=Object.assign(cfg,JSON.parse(raw)); }catch(e){}
+
+  /* オーナー画面が発行したリンクの内容を読む */
+  var qs=new URLSearchParams(location.search);
+  var LINK={
+    room : qs.get('room') || cfg.room,
+    date : qs.get('d')    || '',
+    s    : qs.get('s')    || '10:00',
+    e    : qs.get('e')    || '13:00',
+    code : qs.get('c')    || cfg.code,
+    real : qs.get('real')==='1'
+  };
+  function shift(t,m){ var p=(t||'0:0').split(':'); var x=(+p[0])*60+(+p[1])+m;
+    x=(x+1440)%1440; return ('0'+Math.floor(x/60)).slice(-2)+':'+('0'+(x%60)).slice(-2); }
+  function fmtDate(s){ if(!s) return ''; var p=s.split('-'); if(p.length<3) return s;
+    var d=new Date(+p[0],+p[1]-1,+p[2]); var w=['日','月','火','水','木','金','土'][d.getDay()];
+    return (+p[1])+'月'+(+p[2])+'日('+w+')'; }
 
   var app=document.getElementById('app');
   var modeEl=document.getElementById('mode');
-  function isReal(){ return !!(cfg.api && cfg.uuid && cfg.sec); }
+  /* 実機を動かすのは「自分のロック宛のリンク」かつ鍵情報がある時だけ */
+  function isReal(){ return !!(cfg.api && cfg.uuid && cfg.sec) && (LINK.real || !qs.has('room')); }
 
   /* ---------- AES-CMAC (SESAME の署名) ---------- */
   function hexToBytes(h){
@@ -238,26 +255,28 @@
   /* ---------- 画面 ---------- */
   var state='input', errMsg='';
   function render(){
-    document.getElementById('hdSub').textContent=cfg.room;
+    document.getElementById('hdSub').textContent=LINK.room;
     modeEl.className='mode '+(isReal()?'real':'sim');
     modeEl.textContent=isReal()?'実機と接続中':'デモ表示';
 
     if(state==='input'){
+      var when=(LINK.date?fmtDate(LINK.date)+' ':'')+LINK.s+' – '+LINK.e;
       app.innerHTML=
-        '<div class="badge">🗓 ご予約 10:00 – 13:00</div>'+
+        '<div class="badge">🗓 ご予約 '+when+'</div>'+
         '<h1>予約番号を入れてください</h1>'+
         '<p class="sub">アプリのインストールは不要です</p>'+
         '<button class="codebox" id="fill"><div class="l">お試し用の予約番号（タップで入力）</div>'+
-          '<div class="n">'+cfg.code+'</div></button>'+
+          '<div class="n">'+LINK.code+'</div></button>'+
         '<input class="code" id="inp" inputmode="numeric" maxlength="6" placeholder="0000" aria-label="予約番号">'+
         (errMsg?'<div class="err">⚠️ '+errMsg+'</div>':'')+
-        '<button class="btn" id="go">カギをあける 🔓</button>';
+        '<button class="btn" id="go">カギをあける 🔓</button>'+
+        '<div class="hint">🔐 このリンクで開くのは<br><b>'+LINK.room+'</b> だけです</div>';
       var inp=document.getElementById('inp');
-      document.getElementById('fill').onclick=function(){ inp.value=cfg.code; inp.focus(); };
+      document.getElementById('fill').onclick=function(){ inp.value=LINK.code; inp.focus(); };
       document.getElementById('go').onclick=function(){
         var v=(inp.value||'').trim();
         if(!v){ errMsg='予約番号を入れてください'; render(); return; }
-        if(v!==cfg.code){ errMsg=''; state='deny'; render(); return; }
+        if(v!==LINK.code){ errMsg=''; state='deny'; render(); return; }
         errMsg=''; state='loading'; render(); doUnlock();
       };
       inp.addEventListener('keydown',function(e){ if(e.key==='Enter') document.getElementById('go').click(); });
@@ -269,8 +288,9 @@
       app.innerHTML=
         '<div class="lock open">🔓</div>'+
         '<h1>解錠しました</h1>'+
-        '<p class="sub">ようこそ、お部屋へ。<br>13:15を過ぎると自動で施錠されます。</p>'+
-        '<div class="hint">✅ 鍵の受け渡しゼロ<br><b>予約した時間だけ</b>ひらきます</div>'+
+        '<p class="sub">ようこそ、'+LINK.room+' へ。<br><b>'+shift(LINK.e,15)+'</b> を過ぎると自動で施錠されます。</p>'+
+        '<div class="hint">✅ 鍵の受け渡しゼロ<br>有効なのは <b>'+shift(LINK.s,-15)+' 〜 '+shift(LINK.e,15)+'</b> だけ<br>'+
+          '<span style="color:var(--sub);font-size:12px;">（ご予約 '+LINK.s+'〜'+LINK.e+' の前後15分）</span></div>'+
         '<button class="btn sec" id="again">もう一度みる</button>';
       document.getElementById('again').onclick=function(){ state='input'; render(); };
 

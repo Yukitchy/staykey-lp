@@ -1,0 +1,402 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>カギの発行 ｜ StayKey オーナー画面</title>
+<meta name="robots" content="noindex,nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@500;700;800;900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    color-scheme:light;
+    --font-jp:"M PLUS Rounded 1c",-apple-system,BlinkMacSystemFont,"Hiragino Maru Gothic ProN",sans-serif;
+    --ease:cubic-bezier(.22,1,.36,1); --spring:cubic-bezier(.34,1.56,.64,1);
+    --teal:#0E9E9A; --teal-d:#0B5D64; --deep:#0E3A42; --soft:#E7F6F4;
+    --coral:#F2664A; --coral-d:#c9482f; --gold:#FFC24B; --gold-soft:#FFF6E0;
+    --green:#2E9E6B; --ink:#26383B; --sub:#6A7B7B; --line:#E6E0D6; --bg:#F4F7F6;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+  body{font-family:var(--font-jp);font-weight:500;background:var(--bg);color:var(--ink);
+    line-height:1.8;-webkit-font-smoothing:antialiased;min-height:100dvh;display:flex;flex-direction:column;}
+  body,p,div,span,b,small,button,h1,h2,h3,label{word-break:auto-phrase;line-break:strict;}
+  h1,h2,h3,.hint,.sub,.lbl{text-wrap:balance;}
+
+  .hd{background:linear-gradient(120deg,var(--deep),var(--teal-d));color:#fff;
+    padding:calc(env(safe-area-inset-top) + 15px) 18px 15px;display:flex;align-items:center;gap:11px;}
+  .hd .mk{width:32px;height:32px;flex:none;}
+  .hd .tt small{display:block;font-size:10.5px;opacity:.85;font-weight:700;letter-spacing:.04em;}
+  .hd .tt b{font-size:15px;}
+  .gear{margin-left:auto;background:rgba(255,255,255,.18);border:none;color:#fff;
+    width:32px;height:32px;border-radius:50%;font-size:15px;cursor:pointer;flex:none;}
+
+  main{flex:1;padding:18px 18px calc(env(safe-area-inset-bottom) + 24px);max-width:560px;margin:0 auto;width:100%;}
+
+  .steps{display:flex;align-items:center;gap:5px;margin-bottom:18px;}
+  .sp{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;}
+  .sp .n{width:26px;height:26px;border-radius:50%;background:#E4EAE9;color:#93a5a3;
+    font-weight:900;font-size:12px;display:grid;place-items:center;}
+  .sp .l{font-size:10.5px;font-weight:800;color:#93a5a3;}
+  .sp.on .n{background:var(--coral);color:#fff;box-shadow:0 3px 9px rgba(242,102,74,.34);}
+  .sp.on .l{color:var(--coral-d);}
+  .sp.done .n{background:var(--teal);color:#fff;} .sp.done .l{color:var(--teal-d);}
+  .sbar{height:3px;flex:none;width:16px;border-radius:3px;background:#E4EAE9;margin-bottom:15px;}
+  .sbar.done{background:var(--teal);}
+
+  .card{background:#fff;border:1px solid var(--line);border-radius:16px;padding:17px;
+    box-shadow:0 3px 12px rgba(20,60,60,.07);margin-bottom:13px;}
+  .lbl{font-size:12.5px;font-weight:900;color:var(--teal-d);margin-bottom:9px;display:block;}
+
+  /* ロック選択 */
+  .locks{display:flex;flex-direction:column;gap:9px;}
+  .lk{display:flex;align-items:center;gap:12px;border:2px solid var(--line);background:#fff;
+    border-radius:14px;padding:13px 15px;cursor:pointer;text-align:left;font-family:inherit;width:100%;
+    transition:border-color .15s,background .15s;}
+  .lk:active{transform:scale(.99);}
+  .lk .ic{width:40px;height:40px;border-radius:11px;background:var(--soft);display:grid;
+    place-items:center;font-size:20px;flex:none;}
+  .lk .nm{font-size:14.5px;font-weight:900;display:block;line-height:1.4;}
+  .lk .st{font-size:11.5px;color:var(--sub);font-weight:700;}
+  .lk .chk{margin-left:auto;width:24px;height:24px;border-radius:50%;border:2px solid var(--line);flex:none;}
+  .lk.on{border-color:var(--teal);background:var(--soft);}
+  .lk.on .chk{background:var(--teal);border-color:var(--teal);
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='4' stroke-linecap='round'%3E%3Cpath d='M5 13l4 4L19 7'/%3E%3C/svg%3E");
+    background-size:15px;background-position:center;background-repeat:no-repeat;}
+  .lk.mine{position:relative;}
+  .lk.mine::after{content:"手元の実機";position:absolute;top:-9px;right:11px;background:var(--coral);
+    color:#fff;font-size:10px;font-weight:900;padding:2px 9px;border-radius:999px;}
+
+  /* 時間 */
+  .row{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+  .fld label{display:block;font-size:11.5px;font-weight:800;color:var(--sub);margin-bottom:4px;}
+  .fld input,.fld select{width:100%;padding:12px 13px;border:1.5px solid var(--line);border-radius:11px;
+    font-size:15px;font-family:inherit;background:#FAFCFB;color:var(--ink);font-weight:700;}
+  .fld input:focus,.fld select:focus{outline:none;border-color:var(--teal);background:#fff;}
+  .presets{display:flex;flex-wrap:wrap;gap:7px;margin-top:10px;}
+  .presets button{background:var(--soft);border:none;color:var(--teal-d);font-size:12px;font-weight:800;
+    padding:7px 13px;border-radius:999px;cursor:pointer;font-family:inherit;}
+  .presets button:active{transform:scale(.96);}
+  .buffer{background:var(--gold-soft);border:1px dashed var(--gold);border-radius:11px;
+    padding:10px 13px;font-size:12.3px;color:#8a6a1e;font-weight:700;margin-top:11px;line-height:1.7;}
+
+  .btn{width:100%;border:none;border-radius:14px;padding:16px;font-size:16px;font-weight:900;
+    font-family:inherit;cursor:pointer;background:var(--coral);color:#fff;
+    box-shadow:0 7px 18px rgba(242,102,74,.32);transition:transform .1s var(--spring);}
+  .btn:active{transform:scale(.98);}
+  .btn.sec{background:#fff;color:var(--teal-d);border:2px solid var(--soft);box-shadow:none;}
+  .btn:disabled{opacity:.5;box-shadow:none;}
+
+  /* 発行結果 */
+  .issued{background:linear-gradient(135deg,var(--teal),var(--teal-d));color:#fff;
+    border-radius:16px;padding:19px;box-shadow:0 8px 22px rgba(11,93,100,.3);}
+  .issued .ttl{font-size:12px;font-weight:800;opacity:.9;letter-spacing:.05em;}
+  .issued h2{font-size:19px;font-weight:900;margin:4px 0 12px;}
+  .isum{background:rgba(255,255,255,.15);border-radius:12px;padding:13px 15px;margin-bottom:12px;}
+  .isum div{display:flex;gap:10px;font-size:13.5px;padding:3px 0;}
+  .isum .k{font-weight:800;opacity:.85;flex:none;width:60px;}
+  .isum .v{font-weight:900;}
+  .linkbox{background:#fff;border-radius:12px;padding:12px 14px;color:var(--ink);
+    font-size:11.5px;word-break:break-all;font-weight:700;line-height:1.65;}
+  .codeshow{background:var(--gold);color:#5a4213;border-radius:12px;padding:11px;text-align:center;
+    margin:11px 0;font-weight:900;}
+  .codeshow .n{font-size:27px;letter-spacing:.2em;text-indent:.2em;font-variant-numeric:tabular-nums;}
+  .codeshow .l{font-size:11px;}
+  .acts{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:12px;}
+  .acts button,.acts a{border-radius:12px;padding:13px 8px;font-size:13.5px;font-weight:900;
+    border:none;cursor:pointer;font-family:inherit;text-align:center;text-decoration:none;
+    background:#fff;color:var(--teal-d);}
+  .acts .prime{background:var(--gold);color:#5a4213;}
+
+  .hint{background:#fff;border:1px solid var(--line);border-radius:12px;padding:12px 14px;
+    font-size:12.6px;color:var(--sub);line-height:1.8;margin-top:12px;}
+  .hint b{color:var(--teal-d);}
+  .mode{display:inline-block;font-size:11px;font-weight:800;padding:4px 11px;border-radius:999px;margin-bottom:12px;}
+  .mode.sim{background:#EDEAE4;color:#8b8175;}
+  .mode.real{background:var(--green);color:#fff;}
+
+  /* 設定シート */
+  .sheet{position:fixed;inset:0;background:rgba(10,25,28,.55);z-index:60;display:none;align-items:flex-end;}
+  .sheet.on{display:flex;}
+  .sh-b{background:#fff;width:100%;max-height:92dvh;overflow-y:auto;border-radius:22px 22px 0 0;
+    padding:22px 20px calc(env(safe-area-inset-bottom) + 24px);animation:up .28s var(--ease);}
+  @keyframes up{from{transform:translateY(100%)}to{transform:translateY(0)}}
+  .sh-b h2{font-size:18px;font-weight:900;margin-bottom:4px;}
+  .sh-b .d{font-size:12.8px;color:var(--sub);margin-bottom:15px;}
+  .f2{margin-bottom:12px;}
+  .f2 label{display:block;font-size:12.3px;font-weight:800;color:var(--teal-d);margin-bottom:4px;}
+  .f2 input{width:100%;padding:11px 13px;border:1.5px solid var(--line);border-radius:11px;
+    font-size:14px;font-family:inherit;background:#FAFCFB;}
+  .f2 input:focus{outline:none;border-color:var(--teal);background:#fff;}
+  .f2 small{display:block;font-size:11.2px;color:var(--sub);margin-top:3px;line-height:1.7;}
+  .privacy{background:var(--gold-soft);border:1px dashed var(--gold);border-radius:11px;padding:11px 13px;
+    font-size:11.8px;color:#8a6a1e;font-weight:700;margin-bottom:13px;line-height:1.75;}
+  .status{font-size:12.4px;font-weight:800;padding:9px 12px;border-radius:10px;margin-bottom:12px;}
+  .status.ok{background:#EAF7EF;color:var(--green);} .status.no{background:#EDEAE4;color:#8b8175;}
+  .row2{display:flex;gap:9px;margin-top:5px;}
+  .row2 .btn{padding:13px;font-size:14.5px;}
+  @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;}}
+</style>
+</head>
+<body>
+
+<div class="hd">
+  <svg class="mk" viewBox="0 0 40 40" aria-hidden="true">
+    <rect width="40" height="40" rx="11" fill="rgba(255,255,255,.18)"/>
+    <circle cx="20" cy="15.4" r="9" fill="#FFC24B"/>
+    <path d="M20 15.4V6.4a9 9 0 0 1 9 9z" fill="#0B5D64"/>
+    <circle cx="20" cy="15.4" r="1.8" fill="#0B5D64"/>
+    <path d="M20 24.2v8.8" stroke="#FFC24B" stroke-width="5.2" stroke-linecap="round"/>
+    <path d="M20 27.8h5.4M20 31.2h4" stroke="#FFC24B" stroke-width="4.4" stroke-linecap="round"/>
+  </svg>
+  <div class="tt"><small>StayKey ／ オーナー画面</small><b>カギを発行する</b></div>
+  <button class="gear" id="gear" aria-label="設定">⚙</button>
+</div>
+
+<main>
+  <span class="mode sim" id="mode">デモ表示</span>
+
+  <div class="steps" id="steps"></div>
+  <div id="body"></div>
+</main>
+
+<div class="sheet" id="sheet"><div class="sh-b">
+  <h2>デモ設定</h2>
+  <p class="d">手元の実機を「自分のロック」として登録します。ユウキ専用。</p>
+  <div class="status no" id="stat">未設定（デモ表示で動作中）</div>
+  <div class="privacy">🔒 鍵情報は<b>この端末のブラウザ内にだけ</b>保存されます。ページのソースにも、ネット上にも残りません。</div>
+
+  <div class="f2"><label>手元のロックの表示名</label>
+    <input id="fName" type="text" placeholder="デモ用スマートロック">
+    <small>営業先で見せる時の名前。「〇〇邸 玄関」等にしてもOK。</small></div>
+  <div class="f2"><label>API Key</label>
+    <input id="fApi" type="text" autocomplete="off" placeholder="partners.candyhouse.co で発行"></div>
+  <div class="f2"><label>デバイス UUID</label>
+    <input id="fUuid" type="text" autocomplete="off" placeholder="XXXXXXXX-XXXX-..."></div>
+  <div class="f2"><label>Secret Key</label>
+    <input id="fSec" type="text" autocomplete="off" placeholder="32桁の英数字"></div>
+
+  <div class="row2">
+    <button class="btn sec" id="btnClear">消去</button>
+    <button class="btn" id="btnSave">保存</button>
+  </div>
+  <div class="row2"><button class="btn sec" id="btnTest">🔓 いま実機を開けてテスト</button></div>
+  <div id="testOut" style="margin-top:11px;"></div>
+</div></div>
+
+<script>
+(function(){
+  var LS='staykey_demo_cfg';
+  var cfg={api:'',uuid:'',sec:'',name:'デモ用スマートロック'};
+  try{var r=localStorage.getItem(LS); if(r) cfg=Object.assign(cfg,JSON.parse(r));}catch(e){}
+  function isReal(){return !!(cfg.api&&cfg.uuid&&cfg.sec);}
+
+  /* ダミーの他物件（自分のロックと区別させるため） */
+  var ROOMS=[
+    {id:'mine', name:function(){return cfg.name||'デモ用スマートロック';}, note:'いま目の前にあるカギ', icon:'🔐', mine:true},
+    {id:'r201', name:function(){return '201号室 ・ 玄関';}, note:'ほかの部屋（デモ用）', icon:'🚪'},
+    {id:'r202', name:function(){return '202号室 ・ 玄関';}, note:'ほかの部屋（デモ用）', icon:'🚪'},
+    {id:'ent',  name:function(){return '建物のエントランス';}, note:'ほかの部屋（デモ用）', icon:'🏢'}
+  ];
+
+  var step=1, pick='mine', dateV='', startV='10:00', endV='13:00', issued=null;
+
+  function today(){ var d=new Date(); return d.getFullYear()+'-'+('0'+(d.getMonth()+1)).slice(-2)+'-'+('0'+d.getDate()).slice(-2); }
+  dateV=today();
+  function code4(){ return String(Math.floor(1000+Math.random()*9000)); }
+  function fmtDate(s){ var p=s.split('-'); if(p.length<3) return s;
+    var d=new Date(+p[0],+p[1]-1,+p[2]); var w=['日','月','火','水','木','金','土'][d.getDay()];
+    return (+p[1])+'月'+(+p[2])+'日('+w+')'; }
+  function shift(t,m){ var p=t.split(':'); var x=(+p[0])*60+(+p[1])+m;
+    x=(x+1440)%1440; return ('0'+Math.floor(x/60)).slice(-2)+':'+('0'+(x%60)).slice(-2); }
+
+  function renderSteps(){
+    var L=['ロックを選ぶ','時間を決める','リンクを送る'], h='';
+    L.forEach(function(l,i){
+      var n=i+1, c = step>n?'done':(step===n?'on':'');
+      h+='<div class="sp '+c+'"><span class="n">'+(step>n?'✓':n)+'</span><span class="l">'+l+'</span></div>';
+      if(i<2) h+='<span class="sbar '+(step>n?'done':'')+'"></span>';
+    });
+    document.getElementById('steps').innerHTML=h;
+    var m=document.getElementById('mode');
+    m.className='mode '+(isReal()?'real':'sim');
+    m.textContent=isReal()?'実機と接続中：'+(cfg.name||'マイロック'):'デモ表示（実機は未設定）';
+  }
+
+  function render(){
+    renderSteps();
+    var b=document.getElementById('body');
+
+    if(step===1){
+      var h='<div class="card"><span class="lbl">① どのカギを開けられるようにしますか？</span><div class="locks">';
+      ROOMS.forEach(function(r){
+        h+='<button class="lk '+(pick===r.id?'on':'')+(r.mine?' mine':'')+'" data-id="'+r.id+'">'+
+           '<span class="ic">'+r.icon+'</span>'+
+           '<span><span class="nm">'+r.name()+'</span><span class="st">'+r.note+'</span></span>'+
+           '<span class="chk"></span></button>';
+      });
+      h+='</div>';
+      h+='<div class="hint">💡 <b>選んだカギだけ</b>が開きます。他の部屋のリンクを送ってしまう事故が起きません。</div>';
+      h+='</div><button class="btn" id="next1">つぎへ：時間を決める</button>';
+      b.innerHTML=h;
+      b.querySelectorAll('.lk').forEach(function(el){
+        el.onclick=function(){ pick=el.getAttribute('data-id'); render(); };
+      });
+      document.getElementById('next1').onclick=function(){ step=2; render(); };
+
+    }else if(step===2){
+      var r=ROOMS.filter(function(x){return x.id===pick;})[0];
+      var h='<div class="card"><span class="lbl">② いつ開けられるようにしますか？</span>'+
+        '<div class="fld" style="margin-bottom:10px;"><label>日付</label>'+
+          '<input type="date" id="dt" value="'+dateV+'"></div>'+
+        '<div class="row">'+
+          '<div class="fld"><label>開始</label><input type="time" id="st" value="'+startV+'"></div>'+
+          '<div class="fld"><label>終了</label><input type="time" id="et" value="'+endV+'"></div>'+
+        '</div>'+
+        '<div class="presets">'+
+          '<button data-p="10:00,13:00">10:00–13:00</button>'+
+          '<button data-p="15:00,11:00">チェックイン15時〜</button>'+
+          '<button data-p="09:00,18:00">終日 9–18時</button>'+
+          '<button data-p="now">いまから1時間</button>'+
+        '</div>'+
+        '<div class="buffer">⏱ 実際は<b>前後15分の余裕</b>をつけて発行します（'+shift(startV,-15)+' 〜 '+shift(endV,15)+' に有効）。早く着いたお客様も入れます。</div>'+
+        '</div>'+
+        '<div class="card" style="background:var(--soft);border-color:var(--teal);">'+
+          '<span class="lbl">確認</span>'+
+          '<div style="font-size:14.5px;font-weight:900;line-height:1.7;">'+
+          '🔐 '+r.name()+'<br>📅 '+fmtDate(dateV)+' '+startV+' 〜 '+endV+'</div>'+
+        '</div>'+
+        '<div class="acts" style="grid-template-columns:1fr 2fr;">'+
+          '<button class="btn sec" id="back2">もどる</button>'+
+          '<button class="btn" id="next2">このカギを発行する 🔑</button>'+
+        '</div>';
+      b.innerHTML=h;
+      document.getElementById('dt').onchange=function(){ dateV=this.value; render(); };
+      document.getElementById('st').onchange=function(){ startV=this.value; render(); };
+      document.getElementById('et').onchange=function(){ endV=this.value; render(); };
+      b.querySelectorAll('.presets button').forEach(function(el){
+        el.onclick=function(){
+          var p=el.getAttribute('data-p');
+          if(p==='now'){ var d=new Date();
+            startV=('0'+d.getHours()).slice(-2)+':'+('0'+d.getMinutes()).slice(-2);
+            endV=shift(startV,60);
+          } else { var a=p.split(','); startV=a[0]; endV=a[1]; }
+          render();
+        };
+      });
+      document.getElementById('back2').onclick=function(){ step=1; render(); };
+      document.getElementById('next2').onclick=function(){
+        var r2=ROOMS.filter(function(x){return x.id===pick;})[0];
+        issued={ room:r2.name(), mine:!!r2.mine, date:dateV, s:startV, e:endV,
+                 vs:shift(startV,-15), ve:shift(endV,15), code:code4() };
+        step=3; render();
+      };
+
+    }else{
+      var q=issued;
+      var url=location.origin+location.pathname.replace(/host\/$/,'unlock/')+
+        '?room='+encodeURIComponent(q.room)+'&d='+encodeURIComponent(q.date)+
+        '&s='+encodeURIComponent(q.s)+'&e='+encodeURIComponent(q.e)+
+        '&c='+q.code+(q.mine?'&real=1':'');
+      var h='<div class="issued">'+
+        '<div class="ttl">✅ 発行しました</div>'+
+        '<h2>このリンクをお客様に送ります</h2>'+
+        '<div class="isum">'+
+          '<div><span class="k">カギ</span><span class="v">'+q.room+'</span></div>'+
+          '<div><span class="k">日付</span><span class="v">'+fmtDate(q.date)+'</span></div>'+
+          '<div><span class="k">時間</span><span class="v">'+q.s+' 〜 '+q.e+'</span></div>'+
+          '<div><span class="k">有効</span><span class="v">'+q.vs+' 〜 '+q.ve+'（前後15分）</span></div>'+
+        '</div>'+
+        '<div class="codeshow"><div class="l">お客様に伝える予約番号</div><div class="n">'+q.code+'</div></div>'+
+        '<div class="linkbox">'+url+'</div>'+
+        '<div class="acts">'+
+          '<button id="cp">📋 リンクをコピー</button>'+
+          '<a class="prime" href="'+url+'" target="_blank" rel="noopener">👀 お客様の画面を見る</a>'+
+        '</div>'+
+        '</div>'+
+        '<div class="hint">📱 実際は<b>予約が入った時点で自動でメールが飛ぶ</b>ので、この操作すら不要です。ここでは中で何が起きているかをお見せしています。</div>'+
+        '<div class="acts" style="grid-template-columns:1fr 1fr;margin-top:12px;">'+
+          '<button class="btn sec" id="again">もう一度つくる</button>'+
+          '<button class="btn sec" id="share">📤 送る</button>'+
+        '</div>';
+      b.innerHTML=h;
+      document.getElementById('cp').onclick=function(){
+        navigator.clipboard.writeText(url).then(function(){ document.getElementById('cp').textContent='✅ コピーしました'; });
+      };
+      document.getElementById('again').onclick=function(){ step=1; issued=null; render(); };
+      document.getElementById('share').onclick=function(){
+        var txt='【'+q.room+'】のカギです\n'+fmtDate(q.date)+' '+q.s+'〜'+q.e+'\n予約番号：'+q.code+'\n'+url;
+        if(navigator.share){ navigator.share({title:'お部屋のカギ',text:txt}); }
+        else{ navigator.clipboard.writeText(txt).then(function(){ document.getElementById('share').textContent='✅ コピーしました'; }); }
+      };
+    }
+  }
+
+  /* 設定 */
+  var sheet=document.getElementById('sheet');
+  function fill(){
+    document.getElementById('fName').value=cfg.name;
+    document.getElementById('fApi').value=cfg.api;
+    document.getElementById('fUuid').value=cfg.uuid;
+    document.getElementById('fSec').value=cfg.sec;
+    var s=document.getElementById('stat');
+    if(isReal()){ s.className='status ok'; s.textContent='✅ 設定済み（実機に接続します）'; }
+    else{ s.className='status no'; s.textContent='未設定（デモ表示で動作中）'; }
+  }
+  document.getElementById('gear').onclick=function(){ fill(); sheet.classList.add('on'); };
+  sheet.onclick=function(e){ if(e.target===sheet) sheet.classList.remove('on'); };
+  document.getElementById('btnSave').onclick=function(){
+    cfg.name=document.getElementById('fName').value.trim()||'デモ用スマートロック';
+    cfg.api=document.getElementById('fApi').value.trim();
+    cfg.uuid=document.getElementById('fUuid').value.trim();
+    cfg.sec=document.getElementById('fSec').value.trim();
+    try{ localStorage.setItem(LS,JSON.stringify(cfg)); }catch(e){}
+    fill(); sheet.classList.remove('on'); render();
+  };
+  document.getElementById('btnClear').onclick=function(){
+    if(!confirm('保存した鍵情報を消しますか？')) return;
+    cfg={api:'',uuid:'',sec:'',name:'デモ用スマートロック'};
+    try{ localStorage.removeItem(LS); }catch(e){}
+    fill(); render();
+  };
+
+  /* CMAC（実機テスト用） */
+  function hexToBytes(h){h=(h||'').replace(/[^0-9a-fA-F]/g,'');var a=new Uint8Array(h.length/2);
+    for(var i=0;i<a.length;i++)a[i]=parseInt(h.substr(i*2,2),16);return a;}
+  function bytesToHex(b){return Array.prototype.map.call(b,function(x){return ('0'+x.toString(16)).slice(-2);}).join('');}
+  function shl(a){var o=new Uint8Array(16),c=0;
+    for(var i=15;i>=0;i--){o[i]=((a[i]<<1)|c)&0xff;c=(a[i]&0x80)?1:0;}
+    if(a[0]&0x80)o[15]^=0x87;return o;}
+  async function cmac(k,m){
+    var key=await crypto.subtle.importKey('raw',k,{name:'AES-CBC'},false,['encrypt']);
+    var iv=new Uint8Array(16);
+    async function enc(b){var c=await crypto.subtle.encrypt({name:'AES-CBC',iv:iv},key,b);return new Uint8Array(c).slice(0,16);}
+    var L=await enc(new Uint8Array(16)),K1=shl(L),K2=shl(K1),M=new Uint8Array(16);
+    if(m.length===16){M.set(m);for(var i=0;i<16;i++)M[i]^=K1[i];}
+    else{M.set(m);M[m.length]=0x80;for(var j=0;j<16;j++)M[j]^=K2[j];}
+    return await enc(M);
+  }
+  async function realUnlock(a,u,s){
+    var ts=Math.floor(Date.now()/1000),bb=new ArrayBuffer(4);
+    new DataView(bb).setUint32(0,ts,true);
+    var sign=bytesToHex(await cmac(hexToBytes(s),new Uint8Array(bb).slice(1,4)));
+    var res=await fetch('https://app.candyhouse.co/api/sesame2/'+encodeURIComponent(u)+'/cmd',{
+      method:'POST',headers:{'x-api-key':a,'Content-Type':'application/json'},
+      body:JSON.stringify({cmd:88,history:btoa('StayKey demo'),sign:sign})});
+    if(!res.ok) throw new Error('API '+res.status);
+    return true;
+  }
+  document.getElementById('btnTest').onclick=async function(){
+    var o=document.getElementById('testOut');
+    var a=document.getElementById('fApi').value.trim(),u=document.getElementById('fUuid').value.trim(),s=document.getElementById('fSec').value.trim();
+    if(!a||!u||!s){ o.innerHTML='<div class="status no">3つとも入力してください</div>'; return; }
+    o.innerHTML='<div class="status no">送信中…</div>';
+    try{ await realUnlock(a,u,s); o.innerHTML='<div class="status ok">✅ 解錠コマンドを送りました。実機は回りましたか？</div>'; }
+    catch(e){ o.innerHTML='<div class="status no">届きませんでした（'+e.message+'）<br>ハブの通信／鍵情報／CORS制限を確認</div>'; }
+  };
+
+  render();
+})();
+</script>
+</body>
+</html>
