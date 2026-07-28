@@ -1,0 +1,344 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>StayKey 営業先リスト</title>
+<meta name="description" content="実機を持って回る営業先の一覧。優先度・物件数・連絡手段つき。">
+<meta name="robots" content="noindex,nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;500;700;800;900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    color-scheme:light;
+    --font-jp:"M PLUS Rounded 1c",-apple-system,BlinkMacSystemFont,"Hiragino Maru Gothic ProN",sans-serif;
+    --ease:cubic-bezier(.22,1,.36,1);
+    --teal:#0E9E9A; --teal-d:#0B5D64; --deep:#0E3A42; --soft:#E7F6F4;
+    --coral:#F2664A; --coral-d:#c9482f; --coral-soft:#FDEBE5;
+    --gold:#FFC24B; --gold-soft:#FFF6E0; --green:#2E9E6B; --green-soft:#EAF7EF;
+    --purple:#7B6BA8; --purple-soft:#F0EDF7;
+    --ink:#26383B; --sub:#6A7B7B; --line:#E6E0D6; --bg:#FBF7F1; --card:#fff;
+    --r:16px; --sh:0 8px 24px rgba(20,60,60,.09); --sh2:0 3px 10px rgba(20,60,60,.07);
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{background:var(--bg);color:var(--ink);font-family:var(--font-jp);font-weight:500;
+    line-height:1.85;-webkit-font-smoothing:antialiased;overflow-x:hidden;}
+  body,p,li,td,th,div,span,b,small,button,a,h1,h2,h3{
+    word-break:auto-phrase;line-break:strict;overflow-wrap:anywhere;}
+  h1,h2,h3,.lead,.note,.kick,.pn{text-wrap:balance;}
+  p,li{text-wrap:pretty;}
+  h1,h2,h3{font-weight:900;line-height:1.4;}
+  .wrap{max-width:880px;margin:0 auto;padding:0 18px;}
+
+  .cover{background:radial-gradient(120% 120% at 85% -10%,rgba(255,194,75,.3),transparent 58%),
+    linear-gradient(135deg,#0A2A30,#0E3A42 45%,#0E7C86);color:#fff;padding:44px 0 38px;position:relative;overflow:hidden;}
+  .cover::after{content:"";position:absolute;inset:auto 0 0 0;height:52px;
+    background:repeating-linear-gradient(115deg,rgba(255,255,255,.05) 0 22px,transparent 22px 46px);}
+  .cover .wrap{position:relative;z-index:1;}
+  .kick{display:inline-block;background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.34);
+    padding:5px 14px;border-radius:999px;font-size:12.5px;font-weight:800;margin-bottom:12px;}
+  .cover h1{font-size:27px;margin-bottom:10px;}
+  .cover h1 b{color:var(--gold);}
+  .cover p{font-size:14.5px;opacity:.95;max-width:640px;}
+  .stats{margin-top:18px;display:flex;flex-wrap:wrap;gap:8px;}
+  .stats span{background:rgba(255,255,255,.14);padding:7px 13px;border-radius:9px;font-size:12.5px;font-weight:800;}
+
+  section{padding:32px 0;}
+  .sec-h{display:flex;align-items:center;gap:10px;margin-bottom:6px;flex-wrap:wrap;}
+  .tier{color:#fff;font-weight:900;font-size:12.5px;padding:5px 13px;border-radius:9px;flex:none;}
+  .tier.a{background:var(--coral);} .tier.b{background:var(--teal-d);}
+  .tier.c{background:var(--purple);} .tier.d{background:#9AA5A3;}
+  .sec-h h2{font-size:19px;}
+  .lead{color:var(--sub);font-size:14px;margin-bottom:16px;}
+
+  /* 人カード */
+  .people{display:flex;flex-direction:column;gap:11px;}
+  .pc{background:var(--card);border:1px solid var(--line);border-radius:15px;
+    padding:15px 17px;box-shadow:var(--sh2);}
+  .pc.hot{border:2px solid var(--coral);background:linear-gradient(180deg,var(--coral-soft),#fff);}
+  .pc-h{display:flex;align-items:baseline;gap:9px;flex-wrap:wrap;margin-bottom:7px;}
+  .pn{font-size:16px;font-weight:900;}
+  .pw{font-size:12px;font-weight:800;color:var(--sub);background:#F2F5F4;padding:3px 10px;border-radius:999px;}
+  .pw.rooms{background:var(--soft);color:var(--teal-d);}
+  .pw.key{background:var(--gold-soft);color:#8a6a1e;}
+  .pw.done{background:#EDEAE4;color:#8b8175;}
+  .pd{font-size:13.2px;color:var(--sub);line-height:1.8;}
+  .pd b{color:var(--ink);}
+  .why{background:var(--soft);border-radius:10px;padding:9px 12px;font-size:12.6px;
+    color:var(--teal-d);font-weight:700;margin-top:9px;line-height:1.75;}
+  .pl{display:flex;flex-wrap:wrap;gap:7px;margin-top:9px;}
+  .pl a{background:#F2F5F4;color:var(--teal-d);font-size:11.8px;font-weight:800;
+    padding:6px 12px;border-radius:999px;text-decoration:none;}
+  .pl a:hover{background:var(--teal);color:#fff;}
+
+  /* コンパクト表 */
+  table{width:100%;border-collapse:collapse;font-size:13px;border-radius:12px;overflow:hidden;}
+  th{background:var(--deep);color:#fff;padding:9px 11px;text-align:left;font-size:12.2px;font-weight:700;}
+  td{padding:10px 11px;border-bottom:1px solid var(--line);vertical-align:top;}
+  tr:nth-child(even) td{background:#F8FAF9;}
+  tr:last-child td{border-bottom:none;}
+  td a{color:var(--teal-d);font-weight:800;}
+  .scroll-x{overflow-x:auto;}
+
+  /* ルート */
+  .routes{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;}
+  .rt{background:#fff;border:1px solid var(--line);border-radius:15px;padding:16px;box-shadow:var(--sh2);
+    border-top:4px solid var(--teal);}
+  .rt .h{font-size:14.5px;font-weight:900;margin-bottom:5px;}
+  .rt .n{font-size:22px;font-weight:900;color:var(--teal-d);font-variant-numeric:tabular-nums;}
+  .rt p{font-size:12.6px;color:var(--sub);}
+
+  .tip{background:var(--soft);border-radius:12px;padding:12px 15px;font-size:13px;
+    color:var(--teal-d);font-weight:700;margin-top:13px;}
+  .warn{background:var(--coral-soft);border-left:4px solid var(--coral);border-radius:12px;
+    padding:12px 15px;font-size:13px;color:var(--coral-d);font-weight:700;margin-top:13px;}
+  .note{background:#fff;border:1px dashed var(--line);border-radius:12px;padding:12px 15px;
+    font-size:12.4px;color:var(--sub);margin-top:13px;}
+
+  /* 今週 */
+  .todo{display:flex;flex-direction:column;gap:9px;}
+  .td{display:grid;grid-template-columns:28px 1fr;gap:12px;background:#fff;border:1px solid var(--line);
+    border-radius:13px;padding:13px 15px;box-shadow:var(--sh2);align-items:start;}
+  .td .n{width:28px;height:28px;border-radius:50%;background:var(--coral);color:#fff;
+    font-weight:900;font-size:13px;display:grid;place-items:center;}
+  .td b{font-size:14px;display:block;}
+  .td small{font-size:12.5px;color:var(--sub);display:block;line-height:1.75;}
+
+  footer{padding:24px 0 42px;text-align:center;color:var(--sub);font-size:12px;}
+  .rv{opacity:0;transform:translateY(18px);transition:opacity .55s var(--ease),transform .55s var(--ease);}
+  .rv.in{opacity:1;transform:none;}
+  @media(prefers-reduced-motion:reduce){.rv{opacity:1!important;transform:none!important;transition:none!important;}}
+  @media(max-width:680px){
+    .routes{grid-template-columns:1fr;}
+    .cover h1{font-size:22px;} .sec-h h2{font-size:17px;}
+  }
+</style>
+</head>
+<body>
+
+<div class="cover"><div class="wrap">
+  <span class="kick">StayKey ／ 営業先リスト</span>
+  <h1>実機が来たら、<br><b>この順番で回ります</b> 🔐</h1>
+  <p>みんらじのゲスト・知人から、民泊／スペース運営者を洗い出しました。<br>優先度順に並べています。</p>
+  <div class="stats">
+    <span>👤 候補 27名</span><span>🏠 都内近郊 8名</span><span>🔥 即動ける 3名</span><span>🤝 団体ルート 3本</span>
+  </div>
+</div></div>
+
+<!-- Aランク -->
+<section><div class="wrap">
+  <div class="sec-h"><span class="tier a">最優先</span><h2>まずこの3人（実機が来たらすぐ）</h2></div>
+  <p class="lead">合意済み・物件数が多い・鍵の課題が確認できている、のどれかに当てはまる人です。</p>
+  <div class="people">
+
+    <div class="pc hot rv">
+      <div class="pc-h"><span class="pn">哲郎さん（小島哲郎）</span>
+        <span class="pw">東京・浅草／西巣鴨</span><span class="pw rooms">3軒・4〜5室</span>
+        <span class="pw" style="background:var(--green-soft);color:var(--green);">合意済み</span></div>
+      <p class="pd">旅館業民泊を2015年から。宅建保有。大田区でも複数物件をサポート。<br>
+        <b>みんらじの共同パーソナリティ＝毎週会う相手。</b></p>
+      <div class="why">🎯 <b>7/27の打合せで、デモ導入の第一候補として既に話が出ている。</b>対面コストゼロ、断られるリスクも最小。ここが1件目で確定。導入後は「民泊先生が使っている」という最強の事例になり、そのまま番組で語れる。</div>
+      <div class="pl"><a href="https://www.airbnb.jp/rooms/40894809" target="_blank" rel="noopener">ホテル リトルバード 奥浅草 ↗</a></div>
+    </div>
+
+    <div class="pc hot rv">
+      <div class="pc-h"><span class="pn">施術室の時間貸し事業者</span>
+        <span class="pw">都内中心・関東</span><span class="pw rooms">20〜30店舗</span>
+        <span class="pw key">物理キー運用</span></div>
+      <p class="pd">ADDress（多拠点住み放題）で知り合った知人。新宿等のワンルーム一室に施術台・メイク台を置いて<b>1時間数百〜1000円で時間貸し</b>。ユウキは実際にその部屋に泊まらせてもらったことがある。</p>
+      <div class="why">🎯 <b>物理キー運用をユウキ本人が目で確認済み。しかも1社で20〜30部屋＝ロットが桁違い。</b>「客が頻繁に入れ替わる・無人・時間貸し」というStayKeyの理想条件に完全一致。</div>
+      <div class="warn" style="margin-top:9px;">⚠️ <b>氏名がどの記録にも残っていません。</b>FB / LINE の履歴を遡って特定するのが最優先の一手です。</div>
+    </div>
+
+    <div class="pc hot rv">
+      <div class="pc-h"><span class="pn">かすみさん（香寿美）</span>
+        <span class="pw">熊本市中央区帯山</span><span class="pw rooms">11室</span>
+        <span class="pw" style="background:var(--green-soft);color:var(--green);">興味あり</span></div>
+      <p class="pd">屋号「KASUMI-an」。Airbnbスーパーホスト歴11年・★4.84・749レビュー。<br>
+        <b>JAMTA熊本支部「泊まんなっせ肥後の会」代表。</b>別件（補助金伴走事業）でも組んでいる。</p>
+      <div class="why">🎯 <b>すでに興味を示してくれている。</b>#1〜#3の3室が風呂・トイレ共用のゲストハウス棟＝鍵の受け渡しが最も煩雑な構造。ここが1号にふさわしい。<br>
+      ⚠️ ただし<b>熊本＝対面できない</b>。実機デモは使えないので、遠隔導入が成立するかの検証案件として別枠で進める。</div>
+      <div class="pl">
+        <a href="https://www.airbnb.jp/users/show/48369176" target="_blank" rel="noopener">Airbnb ↗</a>
+        <a href="https://kasumian.amebaownd.com/" target="_blank" rel="noopener">KASUMI-an ↗</a>
+        <a href="../pilot/" target="_blank" rel="noopener">📋 パイロット計画 ↗</a>
+      </div>
+    </div>
+
+  </div>
+</div></section>
+
+<!-- Bランク -->
+<section style="background:linear-gradient(180deg,var(--soft),var(--bg));"><div class="wrap">
+  <div class="sec-h"><span class="tier b">都内近郊</span><h2>実機を持って会いに行ける人</h2></div>
+  <p class="lead">移動30分〜1時間圏内。<b>対面デモが最も効く層</b>です。</p>
+  <div class="people">
+
+    <div class="pc rv">
+      <div class="pc-h"><span class="pn">Kenさん</span><span class="pw">築150年古民家</span>
+        <span class="pw rooms">複数</span><span class="pw key">場所貸し併用</span></div>
+      <p class="pd">民泊＋<b>場所貸し＋シェアハウスを並行運用</b>。<b>Airbnb日本代表ホスト10人の1人</b>で、CEO来日会見に招待された立場。みんらじ #69-71 / #102-103。</p>
+      <div class="why">🎯 「場所貸し」を実運用している数少ない相手＝<b>鍵の受け渡し回数が最も多い業態</b>。加えて全国のホストコミュニティへの波及力が抜群。1件で紹介チャネルまで取れる。</div>
+      <div class="pl"><a href="https://minna-no-kominka.jp" target="_blank" rel="noopener">みんなの古民家 ↗</a></div>
+    </div>
+
+    <div class="pc rv">
+      <div class="pc-h"><span class="pn">ユカリさん</span><span class="pw">神奈川・鶴見ほか</span>
+        <span class="pw rooms">複数拠点</span></div>
+      <p class="pd">多拠点民泊。<b>神奈川民泊コミュニティリーダー。</b>清掃スタッフとの連携運用あり。みんらじ #61-63。</p>
+      <div class="why">🎯 清掃スタッフとの鍵の受け渡しが実在する＝<b>痛みが具体的</b>。コミュニティリーダーなので、1人落とすと神奈川ごと広がる。</div>
+      <div class="pl"><a href="https://x.com/yukarinstyle" target="_blank" rel="noopener">X ↗</a></div>
+    </div>
+
+    <div class="pc rv">
+      <div class="pc-h"><span class="pn">マリさん</span><span class="pw">横浜元町中華街／真鶴</span>
+        <span class="pw rooms">3室</span></div>
+      <p class="pd">元町2室＋真鶴1室。みんらじ #72。都内から対面圏内。</p>
+      <div class="why">🎯 <b>3室＝複数台導入の対象。</b>元町と真鶴で離れているので、遠隔で鍵を管理したい動機が生まれやすい。</div>
+      <div class="pl">
+        <a href="https://www.airbnb.com/h/maris-room1" target="_blank" rel="noopener">room1 ↗</a>
+        <a href="https://www.airbnb.com/h/maris-room2" target="_blank" rel="noopener">room2 ↗</a>
+        <a href="https://www.airbnb.com/h/moe201" target="_blank" rel="noopener">真鶴 ↗</a>
+      </div>
+    </div>
+
+    <div class="pc rv">
+      <div class="pc-h"><span class="pn">けいこさん</span><span class="pw">東京・台東区</span></div>
+      <p class="pd">商業地域で旅館業想定の民泊。<b>Airbnbコミュニティリーダー</b>、民泊有識者会議の参加経験あり。みんらじ #12-15（初期ゲスト）。</p>
+      <div class="why">🎯 コミュニティリーダー＝<b>面で広がる</b>。台東区は浅草の哲郎さんと近いので、同じ日にまとめて回れる。</div>
+    </div>
+
+    <div class="pc rv">
+      <div class="pc-h"><span class="pn">ハルクさん</span><span class="pw">神奈川・湘南片瀬江ノ島</span>
+        <span class="pw key">民泊コンサル</span></div>
+      <p class="pd">サラリーマン民泊＋<b>民泊コンサル業</b>。みんらじ #73。メール公開あり。</p>
+      <div class="why">🎯 <b>コンサル業＝他ホストへの紹介ハブ</b>になりうる。自分が使って良ければ顧客に薦めてもらえる可能性。</div>
+      <div class="pl">
+        <a href="https://www.airbnb.jp/h/molle-shonan" target="_blank" rel="noopener">Airbnb ↗</a>
+        <a href="mailto:mail@molle-shonan.com">✉️ mail@molle-shonan.com</a>
+      </div>
+    </div>
+
+    <div class="pc rv">
+      <div class="pc-h"><span class="pn">ケンイチさん</span><span class="pw">東京・飯田橋</span>
+        <span class="pw rooms">複数（ドミナント）</span><span class="pw done">要注意</span></div>
+      <p class="pd">副業民泊で近接複数拠点を運営。みんらじ #27-29「副業民泊のカリスマ」。<b>本業はIT会社経営者。</b></p>
+      <div class="why">⚠️ <b>リテラシーが高いので「自分で作れる」と言われる可能性が高い層。</b>価格でなく「導入代行と安心」＝手間を丸投げできる価値で話す。粘らないこと。</div>
+    </div>
+
+    <div class="pc rv">
+      <div class="pc-h"><span class="pn">なつさん</span><span class="pw">神奈川・北鎌倉</span>
+        <span class="pw rooms">1室</span></div>
+      <p class="pd">みんらじ #92-93（リスナーからゲストに）。番組で<b>「続けるべきか悩んでます」</b>と相談していた。</p>
+      <div class="why">🎯 <b>運営負荷が課題として顕在化している。</b>「手間が減る」提案が最も刺さるタイプ。ただし1室なので単価は小さい。</div>
+      <div class="pl"><a href="https://www.airbnb.jp/rooms/1144081139534753490" target="_blank" rel="noopener">Airbnb ↗</a></div>
+    </div>
+
+    <div class="pc rv">
+      <div class="pc-h"><span class="pn">池田幸司さん（and factory）</span><span class="pw">東京・秋葉原</span>
+        <span class="pw rooms">ホステル1棟</span><span class="pw done">要確認</span></div>
+      <p class="pd">&AND HOSTEL AKIHABARA。2026年5月に秋葉原で初対面、ツアー協業で商談中。Messengerグループあり（幸司・慧・Tomoyo・ユウキ）。現地対応は境慧さん。</p>
+      <div class="why">⚠️ <b>&AND HOSTELはブランド自体が「IoTホテル」を掲げており、スマートロック導入済みの可能性が高い。</b>当てる前に確認を。※これは推測なので要検証。</div>
+    </div>
+
+    <div class="pc rv">
+      <div class="pc-h"><span class="pn">Ayaさん</span><span class="pw">都内</span>
+        <span class="pw rooms">1＋（物件探し中）</span><span class="pw done">導入済み</span></div>
+      <p class="pd">同居型民泊を10年以上。サラリーマン副業。みんらじ #41-42。</p>
+      <div class="why">⚠️ <b>番組で「鍵の持ち去り問題はスマートロックで解決」と発言済み＝すでに導入済み。</b>狙うなら「乗り換え」か「増やす物件の分」。優先度は低め。</div>
+    </div>
+
+  </div>
+</div></section>
+
+<!-- Cランク -->
+<section><div class="wrap">
+  <div class="sec-h"><span class="tier c">遠隔</span><h2>会いに行けないが、価値のある人</h2></div>
+  <p class="lead">対面デモは使えないので、<b>オンライン＋かすみさんの遠隔導入が成功してから</b>が本番です。</p>
+  <div class="scroll-x">
+  <table>
+    <tr><th>名前</th><th>エリア</th><th>物件</th><th>リンク</th><th>ひとこと</th></tr>
+    <tr><td><b>進藤さん</b><br><small>変態設計士</small></td><td>東京・代々木<br>＋全国</td><td>設計案件多数</td><td><a href="https://be-fun.com" target="_blank" rel="noopener">be-fun.com ↗</a></td><td><b>旅館業民泊の設計士。</b>自社物件より<b>設計案件への標準採用</b>ルートとして価値大。1人の説得が複数物件に効く</td></tr>
+    <tr><td><b>ショウさん</b><br><small>FUMOTO</small></td><td>岩手・盛岡</td><td>ログハウス1＋</td><td><a href="https://www.airbnb.jp/rooms/32900913" target="_blank" rel="noopener">Airbnb ↗</a></td><td><b>リスティングトレード（初心者ホスト支援）事業</b>あり＝紹介ハブ</td></tr>
+    <tr><td><b>けいたさん</b></td><td>石川・金沢</td><td>1</td><td><a href="https://www.airbnb.jp/rooms/22943391" target="_blank" rel="noopener">Airbnb ↗</a></td><td><b>北陸コミュニティリーダー。</b>英語NG＝非リテラシー層に近く、まさにターゲット層</td></tr>
+    <tr><td><b>いとへんさん</b><br><small>雑忠</small></td><td>静岡・伊豆下田</td><td>3リスティング</td><td><a href="https://itohen.world" target="_blank" rel="noopener">itohen.world ↗</a></td><td>築170年古民家。#114で集客の悩み相談＝関係が濃い</td></tr>
+    <tr><td><b>まさおさん</b><br><small>後藤まさお</small></td><td>栃木・日光</td><td>複数室</td><td><a href="https://facebook.com/masao.gotou" target="_blank" rel="noopener">FB ↗</a></td><td>部屋ごとにコンセプト＝複数室。<b>Messengerで直接連絡可</b></td></tr>
+    <tr><td><b>Rieさん</b></td><td>沖縄</td><td>2</td><td><a href="https://www.airbnb.jp/rooms/18675523" target="_blank" rel="noopener">①</a> / <a href="https://www.airbnb.jp/rooms/25895165" target="_blank" rel="noopener">②</a></td><td>Airbnb本社訪問経験あり</td></tr>
+    <tr><td><b>なつみさん</b><br><small>にゃん泊</small></td><td>愛知・南知多</td><td>1</td><td><a href="https://www.airbnb.com/rooms/1550314060931603506" target="_blank" rel="noopener">Airbnb ↗</a></td><td><b>6/30の公開収録に登壇＝直近で顔を合わせている</b>ので連絡しやすい</td></tr>
+    <tr><td><b>ガクさん</b><br><small>星空ロッヂ</small></td><td>長野・阿智村</td><td>1</td><td><a href="https://www.airbnb.jp/rooms/1228869916187629394" target="_blank" rel="noopener">Airbnb ↗</a></td><td>同じく公開収録に登壇。両親と運営</td></tr>
+    <tr><td><b>ゆーすけさん</b></td><td>京都</td><td>町屋1</td><td><a href="https://www.airbnb.jp/rooms/17112686" target="_blank" rel="noopener">Airbnb ↗</a></td><td>築120年町屋。元自衛官</td></tr>
+    <tr><td><b>山口さん</b></td><td>三重・伊勢志摩</td><td>1</td><td><a href="https://www.airbnb.jp/rooms/1071351186325022852" target="_blank" rel="noopener">Airbnb ↗</a></td><td>#140-141。同回のまさとさんは物件情報なし</td></tr>
+    <tr><td><b>Mihoさん</b><br><small>てまり庵</small></td><td>石川・能登</td><td>不明</td><td><a href="https://temari.hotel-aimer.com" target="_blank" rel="noopener">公式 ↗</a></td><td>Art Hotel。能登地震で被災者受け入れ</td></tr>
+    <tr><td><b>かつぴんさん</b></td><td>不明<br>（ドミナント）</td><td>複数</td><td><a href="https://x.com/sodateru104" target="_blank" rel="noopener">X ↗</a></td><td>スーパーホスト。同席の<a href="https://x.com/ryutopia823" target="_blank" rel="noopener">リュートさん</a>も同業</td></tr>
+  </table>
+  </div>
+</div></section>
+
+<!-- 新規開業 -->
+<section style="background:linear-gradient(180deg,var(--gold-soft),var(--bg));"><div class="wrap">
+  <div class="sec-h"><span class="tier b" style="background:var(--gold);color:var(--deep);">これから</span><h2>新規開業組（壁がいちばん低い）</h2></div>
+  <p class="lead">既存の人は「今の鍵で回ってる」が壁になりますが、<b>これから作る人には壁がありません</b>。</p>
+  <div class="people">
+    <div class="pc rv">
+      <div class="pc-h"><span class="pn">ヨダケンさん</span><span class="pw">長野・ワイナリー「の音wines」</span>
+        <span class="pw" style="background:var(--gold-soft);color:#8a6a1e;">開業準備中</span></div>
+      <p class="pd">体験型民泊を計画中。みんらじ #99。</p>
+      <div class="why">🎯 <b>最初からStayKey前提で設計に入れられる。</b>「後から付ける」より圧倒的にラク。</div>
+    </div>
+    <div class="pc rv">
+      <div class="pc-h"><span class="pn">ケンちゃん</span><span class="pw">不明</span>
+        <span class="pw" style="background:var(--gold-soft);color:#8a6a1e;">これから始める</span></div>
+      <p class="pd">番組のプロデュース企画で「これから民泊を始めたい人」として登場。みんらじ #68・#75。</p>
+      <div class="why">🎯 <b>開業のタイミングで刺せる。</b>番組で追っている企画なので、導入の様子もコンテンツになる。</div>
+    </div>
+  </div>
+</div></section>
+
+<!-- 団体ルート -->
+<section><div class="wrap">
+  <div class="sec-h"><span class="tier b">面で取る</span><h2>団体・コミュニティのルート</h2></div>
+  <p class="lead">1人ずつ回るより、<b>コミュニティごと取る</b>方が早い。3本あります。</p>
+  <div class="routes">
+    <div class="rt rv"><div class="h">🔥 JAMTA熊本支部</div><div class="n">35施設</div>
+      <p>「泊まんなっせ肥後の会」。<b>かすみさんが代表</b>。かすみさんの導入が成功すれば、そのまま支部内に広がる可能性。</p></div>
+    <div class="rt rv"><div class="h">🌊 神奈川コミュニティ</div><div class="n">ユカリさん経由</div>
+      <p>神奈川民泊コミュニティリーダー。都内から会いに行ける距離＝<b>実機デモを見せられる</b>のが強み。</p></div>
+    <div class="rt rv"><div class="h">🏔 北陸コミュニティ</div><div class="n">けいたさん経由</div>
+      <p>金沢。北陸コミュニティリーダー。遠隔なので、かすみさんの遠隔導入が成功してから。</p></div>
+  </div>
+  <div class="tip">🍻 <b>いちばんの営業機会はリアルの飲み会です。</b>みんらじでは忘年会（#125-126）・新年会（#85）・区ごと座談会（#97）で<b>複数のホストが一堂に会しています</b>。次回の飲み会にセサミを持っていけば、1回で何人にも見せられます。</div>
+</div></section>
+
+<!-- 今週 -->
+<section style="background:linear-gradient(180deg,var(--coral-soft),var(--bg));"><div class="wrap">
+  <div class="sec-h"><span class="tier a">次の一手</span><h2>実機が来たら、この順で</h2></div>
+  <div class="todo">
+    <div class="td rv"><span class="n">1</span><div><b>自分で1回、最後まで動かす</b>
+      <small>⚙️に鍵情報を登録 → ホスト画面でリンク発行 → 自分のスマホで解錠。<b>CORSで弾かれないかもここで判明します。</b></small></div></div>
+    <div class="td rv"><span class="n">2</span><div><b>ソイさん相手に1回練習する</b>
+      <small>作った本人に見せて、説明が間違っていないか確認してもらう。いちばん安全な練習台。</small></div></div>
+    <div class="td rv"><span class="n">3</span><div><b>哲郎さんに見せる</b>
+      <small>毎週会うので最速。<b>すでに話が出ているので「例のやつ持ってきた」で始められる。</b></small></div></div>
+    <div class="td rv"><span class="n">4</span><div><b>施術室の事業者の名前を特定する</b>
+      <small>FB / LINE の履歴を遡る。<b>20〜30部屋＝いちばん大きい商談</b>なので、ここは時間をかける価値あり。</small></div></div>
+    <div class="td rv"><span class="n">5</span><div><b>都内近郊の人に声をかける</b>
+      <small>Kenさん・ユカリさん・けいこさん・マリさん。「実機持って行きます」と言えるのが今までとの違い。</small></div></div>
+  </div>
+  <div class="note">📌 このリストは公開情報とユウキの人脈メモから作成しています（検索には出ません）。物件数・鍵の現状は<b>会って確認するもの</b>で、確定情報ではありません。</div>
+</div></section>
+
+<footer><div class="wrap">StayKey 営業先リスト ／ 2026.07 ／ 社内用</div></footer>
+
+<script>
+(function(){
+  var t=document.querySelectorAll('.rv');
+  if(!('IntersectionObserver' in window)){t.forEach(function(e){e.classList.add('in');});return;}
+  var io=new IntersectionObserver(function(es){
+    es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}});
+  },{threshold:.1,rootMargin:'0px 0px -30px 0px'});
+  t.forEach(function(e){io.observe(e);});
+})();
+</script>
+</body>
+</html>
